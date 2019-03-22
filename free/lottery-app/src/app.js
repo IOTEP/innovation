@@ -1,8 +1,8 @@
 /*
  * @Author: TravelerZw 
  * @Date: 2019-03-21 23:14:02 
- * @Last Modified by:   TravelerZw 
- * @Last Modified time: 2019-03-21 23:14:02 
+ * @Last Modified by: TravelerZw
+ * @Last Modified time: 2019-03-22 15:53:55
  */
 import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index'
@@ -19,6 +19,7 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/test/test',
       'pages/index/index'
     ],
     window: {
