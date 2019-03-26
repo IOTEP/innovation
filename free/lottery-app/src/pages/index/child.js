@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-03-22 14:20:28 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-03-22 15:01:40
+ * @Last Modified time: 2019-03-26 10:01:17
  */
 import Taro, { Component } from '@tarojs/taro';
 import { View, Text} from '@tarojs/components';
@@ -30,4 +30,4 @@ Child.defaultProps= {
     }]
   }
 }
-export default  ; 
+export default Child; 
