@@ -1,0 +1,6 @@
+server:
+  port: 2023
+  context-path: /tianhe
+  compression:
+    enabled: true
+    min-response-size: 1

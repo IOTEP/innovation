@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iotep.free.mapper.RaffleMapper">
+    <resultMap id="BaseResultMap" type="com.iotep.free.entity.RaffleEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="activity_id" property="activityId" jdbcType="INTEGER"/>
+        <result column="prize_id" property="prizeId" jdbcType="INTEGER"/>
+        <result column="prize_type" property="prizeType" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="raffle_time" property="raffleTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Table_Name">
+        t_raffle
+    </sql>
+
+    <sql id="Base_Column_List">
+        id,user_id,activity_id,prize_id,prize_type,status,raffle_time,created_time
+    </sql>
+
+    <insert id="insertRaffle" useGeneratedKeys="true" keyProperty="id" >
+        insert into
+        <include refid="Table_Name"/>
+        (user_id,activity_id,prize_id,prize_type)
+        values
+        (#{userId},#{activityId},#{prizeId},#{prizeType})
+    </insert>
+
+    <select id="userRaffleCount" >
+        SELECT
+        count(1)
+        FROM
+        <include refid="Table_Name"/>
+        WHERE user_id=#{userId}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iotep.free.mapper.ActivityMapper">
+    <resultMap id="ActivityListBaseResultMap" type="com.iotep.free.entity.ActivityListEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="picture_url_array" property="pictureUrlArray" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="raffle_mode" property="raffleMode" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="is_end" property="isEnd" jdbcType="TINYINT"/>
+        <result column="upper_limit" property="upperLimit" jdbcType="INTEGER"/>
+        <result column="join_limit" property="joinLimit" jdbcType="INTEGER"/>
+        <result column="activity_mode" property="activityMode" jdbcType="TINYINT"/>
+        <result column="comment_count" property="commentCount" jdbcType="INTEGER"/>
+        <result column="like_count" property="likeCount" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="bussiness_name" property="bussinessName" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="created_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Activity_Table_Name">
+        t_activity
+    </sql>
+
+    <sql id="User_Activity_Table_Name">
+        t_user_activity
+    </sql>
+
+    <sql id="Raffle_Activity_Table_Name">
+        t_raffle
+    </sql>
+
+    <sql id="Base_Column_List">
+        id,name,picture_url_array,remark,content,raffle_mode,status,is_end,upper_limit,join_limit,activity_mode,comment_count,like_count,bussiness_name,start_time,end_time, created_time,updated_time
+    </sql>
+
+    <select id="findActivityList" resultMap="ActivityListBaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Activity_Table_Name"/>
+        WHERE is_end=0
+        limit #{start},#{limit}
+    </select>
+
+    <select id="findUserActivityList"  resultMap="ActivityListBaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        u JOIN (
+        SELECT activity_id,created_time
+        FROM
+        <include refid="User_Activity_Table_Name"/>
+        WHERE user_id=#{userId}
+        ) a ON u.id=a.activity_id
+        WHERE
+        <if test="type == 2 ">
+            u.is_end = 0
+        </if>
+        ORDER BY u.updated_time DESC,u.is_end
+        limit #{start},#{limit}
+    </select>
+
+    <select id="findUserRaffleActivityList"  resultMap="ActivityListBaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        u JOIN (
+        SELECT activity_id,created_time
+        FROM
+        <include refid="Raffle_Activity_Table_Name"/>
+        WHERE user_id=#{userId}
+        ) a ON u.id=a.activity_id
+        ORDER BY u.updated_time DESC
+        limit #{start},#{limit}
+    </select>
+
+    <select id="findActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        <include refid="Activity_Table_Name"/>
+        WHERE is_end=0
+    </select>
+
+    <select id="findUserActivityList" resultMap="ActivityListBaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Activity_Table_Name"/>
+        WHERE is_end=0
+        limit #{start},#{limit}
+    </select>
+
+    <select id="findUserActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        <include refid="Activity_Table_Name"/>
+        WHERE is_end=0
+    </select>
+
+    <update id="updateCommentOrLikeCountSub" >
+        update
+        <include refid="Activity_Table_Name"/>
+        set
+        <if test="commentCount != 0 ">
+            comment_count = IF(comment_count &lt; 1, 0, comment_count -1)
+        </if>
+        <if test="likeCount != 0 ">
+            like_count = IF(like_count &lt; 1, 0, like_count -1)
+        </if>
+        where id=#{activityId}
+    </update>
+
+    <update id="updateCommentOrLikeCountAdd" >
+        update
+        <include refid="Activity_Table_Name"/>
+        set
+        <if test="commentCount != 0 ">
+            comment_count =  comment_count + 1
+        </if>
+        <if test="likeCount != 0 ">
+            like_count = like_count + 1
+        </if>
+        where id=#{activityId}
+    </update>
+
+</mapper>

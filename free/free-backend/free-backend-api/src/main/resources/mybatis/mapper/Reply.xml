@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iotep.free.mapper.ReplyMapper">
+    <resultMap id="ReplyBaseResultMap" type="com.iotep.free.entity.ReplyEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="comment_id" property="commentId" jdbcType="INTEGER"/>
+        <result column="reply_id" property="replyId" jdbcType="INTEGER"/>
+        <result column="reply_type" property="replyType" jdbcType="TINYINT"/>
+        <result column="from_uid" property="fromUid" jdbcType="INTEGER"/>
+        <result column="to_uid" property="toUid" jdbcType="INTEGER"/>
+        <result column="like_count" property="likeCount" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Reply_Table_Name">
+        t_comment_reply
+    </sql>
+
+    <sql id="Reply_Base_Column_List">
+        id,comment_id,reply_id,reply_type,from_uid,to_uid,like_count,content,created_time
+    </sql>
+
+    <select id="findActivityCommentReplyList" resultMap="ReplyBaseResultMap">
+        SELECT
+        <include refid="Reply_Base_Column_List"/>
+        FROM
+        <include refid="Reply_Table_Name"/>
+        WHERE status!=0 AND comment_id=#{commentId}
+        limit #{start},#{limit}
+    </select>
+
+    <select id="findActivityReplyListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        <include refid="Reply_Table_Name"/>
+        WHERE status!=0
+    </select>
+
+</mapper>

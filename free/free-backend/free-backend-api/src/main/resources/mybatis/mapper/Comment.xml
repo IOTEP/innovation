@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iotep.free.mapper.CommentMapper">
+    <resultMap id="CommentBaseResultMap" type="com.iotep.free.entity.CommentEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="activity_id" property="activityId" jdbcType="INTEGER"/>
+        <result column="activity_type" property="activityType" jdbcType="TINYINT"/>
+        <result column="from_uid" property="fromUid" jdbcType="INTEGER"/>
+        <result column="comment_count" property="commentCount" jdbcType="INTEGER"/>
+        <result column="like_count" property="likeCount" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Comment_Table_Name">
+        t_activity_comment
+    </sql>
+
+    <sql id="Comment_Base_Column_List">
+        id,from_uid,comment_count,like_count,content,created_time
+    </sql>
+
+    <select id="findActivityCommentList" resultMap="CommentBaseResultMap">
+        SELECT
+        <include refid="Comment_Base_Column_List"/>
+        FROM
+        <include refid="Comment_Table_Name"/>
+        WHERE status!=0 AND activity_id=#{activityId}
+        limit #{start},#{limit}
+    </select>
+
+    <select id="findActivityCommentListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        <include refid="Comment_Table_Name"/>
+        WHERE status!=0
+    </select>
+
+    <update id="updateComment" parameterType="com.iotep.free.entity.CommentEntity" >
+        update
+        <include refid="Comment_Table_Name"/>
+        <set>
+            <if test="content != null ">
+                content = #{content},
+            </if>
+            status = #{status}
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id" parameterType="com.iotep.free.entity.CommentEntity">
+        insert into
+        <include refid="Comment_Table_Name"/>
+        (activity_id,from_uid,content)
+        values
+        (#{activityId},#{fromUid},#{content})
+    </insert>
+
+    <update id="updateCommentOrLikeCountSub" >
+        update
+        <include refid="Comment_Table_Name"/>
+        set
+        <if test="commentCount != 0 ">
+            comment_count = IF(comment_count &lt; 1, 0, comment_count -1)
+        </if>
+        <if test="likeCount != 0 ">
+            like_count = IF(like_count &lt; 1, 0, like_count -1)
+        </if>
+        where id=#{commentId}
+    </update>
+
+    <update id="updateCommentOrLikeCountAdd" >
+        update
+        <include refid="Comment_Table_Name"/>
+        set
+        <if test="commentCount != 0 ">
+            comment_count =  comment_count + 1
+        </if>
+        <if test="likeCount != 0 ">
+            like_count = like_count + 1
+        </if>
+        where id=#{commentId}
+    </update>
+
+
+
+</mapper>

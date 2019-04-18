@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iotep.free.mapper.LikeMapper">
+    <resultMap id="BaseResultMap" type="com.iotep.free.entity.LikeEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="type_id" property="typeId" jdbcType="INTEGER"/>
+        <result column="like_type" property="likeType" jdbcType="TINYINT"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Table_Name">
+        t_like
+    </sql>
+
+    <sql id="Base_Column_List">
+        id,type_id,like_type,user_id,status,created_time
+    </sql>
+
+    <select id="getLikeByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE user_id=#{userId}
+        AND like_type=#{likeType} AND type_id IN (#{typeIdList})
+    </select>
+
+    <select id="getOneLike" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+    </select>
+
+    <insert id="insertLike" useGeneratedKeys="true" keyProperty="id" >
+        insert into
+        <include refid="Table_Name"/>
+        (like_type,type_id,user_id,status)
+        values
+        (#{likeType},#{typeId},#{userId},#{action})
+    </insert>
+
+    <update id="updateLike" >
+        update
+        <include refid="Table_Name"/>
+        set
+        status = #{action},
+        where user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+    </update>
+
+    <delete id="deleteLike"  >
+        delete
+        from
+        <include refid="Table_Name"/>
+        WHERE user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+    </delete>
+
+    <update id="updateLikeCountSub" >
+        update
+        <include refid="Table_Name"/>
+        set
+            like_count = IF(like_count &lt; 1, 0, like_count -1)
+        where id=#{replyId}
+    </update>
+
+    <update id="updateLikeCountAdd" >
+        update
+        <include refid="Table_Name"/>
+        set like_count = like_count + 1
+        where id=#{replyId}
+    </update>
+
+</mapper>
