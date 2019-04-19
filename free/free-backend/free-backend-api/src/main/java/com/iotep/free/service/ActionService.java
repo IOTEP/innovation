@@ -2,8 +2,12 @@ package com.iotep.free.service;
 
 import com.iotep.free.entity.*;
 import com.iotep.free.mapper.*;
+import com.iotep.free.util.RaffleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yongwei7 on 2019/3/28.
@@ -22,6 +26,10 @@ public class ActionService {
     private ActivityMapper activityMapper;
     @Autowired
     private UserActivityMapper userActivityMapper;
+    @Autowired
+    private PrizeMapper prizeMapper;
+    @Autowired
+    private RaffleMapper raffleMapper;
 
 
     /**** 添加&删除点赞 ***/
@@ -178,6 +186,42 @@ public class ActionService {
         userActivityEntity.setUserId(userId);
         userActivityEntity.setActivityId(activityId);
         succ = userActivityMapper.replaceUserActivity(userActivityEntity);
+
+        return succ;
+    }
+
+    /**** 抽奖行为 ***/
+    public int raffleAction(int userId, int activityId) {
+        int succ = 1;
+
+        //活动奖品
+        List<PrizeEntity> prizeList = new ArrayList<>();
+        prizeList = prizeMapper.getActivityPrize(activityId);
+
+        if(prizeList.size() > 0) {
+            //活动参与人
+            List<UserActivityEntity> activityUserList = new ArrayList<>();
+            List<Integer> userList = new ArrayList<>();
+            activityUserList = userActivityMapper.findActivityUserList(activityId);
+            for (int i=0; i < activityUserList.size(); i++){
+                if(!userList.contains(activityUserList.get(i).getUserId())) {
+                    userList.add(activityUserList.get(i).getUserId());
+                }
+            }
+
+            //随机抽奖
+            List<RaffleEntity> raffleList = new ArrayList<>();
+            RaffleUtil.draw(prizeList,userList);
+
+            //批量写入中奖名单
+            succ = raffleMapper.insertRaffleBatch(raffleList);
+
+            if (succ > 0) {
+                //修改活动状态置位is_end
+                activityMapper.updateIsEnd(activityId);
+            }
+
+        }
 
         return succ;
     }

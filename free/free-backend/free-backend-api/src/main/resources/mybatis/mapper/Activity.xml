@@ -133,4 +133,11 @@
         where id=#{activityId}
     </update>
 
+    <update id="updateIsEnd" >
+        update
+        <include refid="Activity_Table_Name"/>
+        set is_end = 1
+        where id=#{activityId}
+    </update>
+
 </mapper>

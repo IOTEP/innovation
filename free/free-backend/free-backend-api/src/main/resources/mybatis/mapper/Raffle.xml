@@ -37,5 +37,19 @@
         WHERE user_id=#{userId}
     </select>
 
+    <insert id="insertRaffleBatch" parameterType="java.util.List">
+        insert into
+        <include refid="Table_Name"/>
+        (user_id,activity_id,prize_id,prize_type)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.userId},
+            #{item.activityId},
+            #{item.prizeId},
+            #{item.prizeType}
+            )
+        </foreach>
+    </insert>
 
 </mapper>

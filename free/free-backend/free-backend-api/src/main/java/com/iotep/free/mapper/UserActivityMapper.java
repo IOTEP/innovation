@@ -29,4 +29,11 @@ public interface UserActivityMapper {
      */
     public int userActivityCount(int userId);
 
+    /**
+     *
+     * @param activityId
+     * @return
+     */
+    public List<UserActivityEntity> findActivityUserList(int activityId);
+
 }

@@ -66,5 +66,12 @@ public interface ActivityMapper {
      */
     public List<ActivityListEntity> findUserRaffleActivityList(int userId,int start,int limit);
 
+    /**
+     *
+     * @param activityId
+     * @return
+     */
+    public int updateIsEnd(int activityId);
+
 
 }
