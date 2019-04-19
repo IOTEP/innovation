@@ -5,6 +5,7 @@ import com.iotep.free.bean.ResponseData;
 import com.iotep.free.bean.ResponsePageData;
 import com.iotep.free.constant.ResponseCode;
 import com.iotep.free.constant.ReturnCode;
+import com.iotep.free.entity.ActivityListEntity;
 import com.iotep.free.entity.UserEntity;
 import com.iotep.free.service.UserService;
 import com.iotep.free.util.ParamUtil;
@@ -92,9 +93,10 @@ public class UserController {
         ResponseData ResponseData = new ResponseData();
 
         int userId = Integer.parseInt(map.get("userId").toString());
+
         try {
             int sort = -1;
-            if (!map.containsKey("sort")){
+            if (map.containsKey("sort")){
                 sort = Integer.parseInt(map.get("sort").toString());
             }
             int page = 1;
@@ -108,6 +110,7 @@ public class UserController {
             Pagination pagination = ParamUtil.filterPagination(page, size);
             ResponsePageData responsePageData = new ResponsePageData<>();
 
+            System.out.println(userId);
             List<UserEntity> dataList = userService.userAttentionList(userId, sort, pagination.getStart(), pagination.getLimit());
 
             responsePageData.setDataList(dataList);
@@ -132,7 +135,7 @@ public class UserController {
         int userId = Integer.parseInt(map.get("userId").toString());
         try {
             int sort = -1;
-            if (!map.containsKey("sort")){
+            if (map.containsKey("sort")){
                 sort = Integer.parseInt(map.get("sort").toString());
             }
             int page = 1;
@@ -163,5 +166,47 @@ public class UserController {
         return ResponseData;
     }
 
+    @RequestMapping(value = "/activity/list", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseData getUserActivityList(@RequestBody Map map) {
+        ResponseData ResponseData = new ResponseData();
+
+        int userId = Integer.parseInt(map.get("userId").toString());
+        try {
+            int type = 0;
+            if (map.containsKey("type")){
+                type = Integer.parseInt(map.get("type").toString());
+            }
+
+            int sort = -1;
+            if (map.containsKey("sort")){
+                sort = Integer.parseInt(map.get("sort").toString());
+            }
+            int page = 1;
+            if (map.containsKey("page")) {
+                page = Integer.parseInt(map.get("page").toString());
+            }
+            int size = 10;
+            if (map.containsKey("size")) {
+                size = Integer.parseInt(map.get("size").toString());
+            }
+            Pagination pagination = ParamUtil.filterPagination(page, size);
+            ResponsePageData responsePageData = new ResponsePageData<>();
+
+            List<ActivityListEntity> dataList = userService.findUserActivityList(0,userId, type, sort, pagination.getStart(), pagination.getLimit());
+
+            responsePageData.setDataList(dataList);
+            responsePageData.setPage(pagination.getPage());
+            responsePageData.setSize(pagination.getSize());
+            int total = userService.findUserActivityListCount(0,userId,type);
+            responsePageData.setTotal(total);
+            ResponseData.setData(responsePageData);
+        } catch (Exception e) {
+            ResponseData.setErrNo(ReturnCode.DB_EXCEPTION.getK());
+            ResponseData.setErrMessage(ReturnCode.DB_EXCEPTION.getV());
+
+        }
+
+        return ResponseData;
+    }
 
 }

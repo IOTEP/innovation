@@ -47,7 +47,7 @@
         (#{userId},#{activityId})
     </insert>
 
-    <select id="userActivityCount" >
+    <select id="userActivityCount" resultType="java.lang.Integer">
         SELECT
         count(1)
         FROM

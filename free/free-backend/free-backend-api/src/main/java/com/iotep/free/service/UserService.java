@@ -51,6 +51,7 @@ public class UserService {
 
     public List<UserEntity> userAttentionList(int userId, int sort, int start ,int limit) {
 
+        System.out.println(userId);
         return userMapper.getSocailAttention(userId,start,limit);
     }
 
@@ -110,5 +111,21 @@ public class UserService {
         return activityListEntity;
     }
 
+    public int findUserActivityListCount(int myUserId, int userId,int type) {
+        int total = 0;
+        switch (type){
+            case 0:
+            case 2:
+                total = activityMapper.findUserActivityListCount(userId,type);
+                break;
+            case 1:
+                total = activityMapper.findUserRaffleActivityListCount(userId);
+                break;
+            default:
+                break;
+        }
+
+        return total;
+    }
 
 }

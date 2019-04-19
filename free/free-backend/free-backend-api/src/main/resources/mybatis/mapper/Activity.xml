@@ -52,28 +52,43 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        <include refid="Table_Name"/>
+        <include refid="Activity_Table_Name"/>
         u JOIN (
         SELECT activity_id,created_time
         FROM
         <include refid="User_Activity_Table_Name"/>
         WHERE user_id=#{userId}
         ) a ON u.id=a.activity_id
-        WHERE
         <if test="type == 2 ">
-            u.is_end = 0
+            WHERE u.is_end = 0
         </if>
         ORDER BY u.updated_time DESC,u.is_end
         limit #{start},#{limit}
+    </select>
+
+    <select id="findUserActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        <include refid="Activity_Table_Name"/>
+        u JOIN (
+        SELECT activity_id
+        FROM
+        <include refid="User_Activity_Table_Name"/>
+        WHERE user_id=#{userId}
+        ) a ON u.id=a.activity_id
+        <if test="type == 2 ">
+            WHERE u.is_end = 0
+        </if>
     </select>
 
     <select id="findUserRaffleActivityList"  resultMap="ActivityListBaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        <include refid="Table_Name"/>
+        <include refid="Activity_Table_Name"/>
         u JOIN (
-        SELECT activity_id,created_time
+        SELECT activity_id,prize_type
         FROM
         <include refid="Raffle_Activity_Table_Name"/>
         WHERE user_id=#{userId}
@@ -82,24 +97,15 @@
         limit #{start},#{limit}
     </select>
 
-    <select id="findActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findUserRaffleActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT
         count(*)
         FROM
-        <include refid="Activity_Table_Name"/>
-        WHERE is_end=0
+        <include refid="Raffle_Activity_Table_Name"/>
+        WHERE user_id=#{userId}
     </select>
 
-    <select id="findUserActivityList" resultMap="ActivityListBaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM
-        <include refid="Activity_Table_Name"/>
-        WHERE is_end=0
-        limit #{start},#{limit}
-    </select>
-
-    <select id="findUserActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findActivityListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT
         count(*)
         FROM

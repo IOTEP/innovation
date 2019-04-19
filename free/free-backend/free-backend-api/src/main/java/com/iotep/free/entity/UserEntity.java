@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yaqiang on 2019/3/27 下午1:51
  */
@@ -26,6 +28,6 @@ public class UserEntity {
     private Integer joinActivityCount;
     private Integer createActivityCount;
     private Integer raffleActivityCount;
-    private long createdTime;
-    private long updatedTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

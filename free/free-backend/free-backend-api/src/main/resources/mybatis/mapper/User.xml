@@ -10,7 +10,7 @@
         <result column="app_type" property="appType" jdbcType="TINYINT"/>
         <result column="app_user_id" property="appUserId" jdbcType="VARCHAR"/>
         <result column="access_token" property="accessToken" jdbcType="VARCHAR"/>
-        <result column="created_time" property="createdTime"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
@@ -31,11 +31,11 @@
     </sql>
 
     <sql id="Base_Column_List">
-        id, type,nick,photo,bussiness_name,app_type,app_user_id, access_token,created_time,updated_time
+        id, type,nick,photo,bussiness_name,app_type,app_user_id, access_token,created_time
     </sql>
 
     <sql id="Base_Activity_User_Column_List">
-        id, type,nick,photo,bussiness_name,app_type,app_user_id, access_token,a.created_time,updated_time
+        id, type,nick,photo,bussiness_name,app_type,app_user_id, access_token,a.created_time
     </sql>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.iotep.free.entity.UserEntity">
@@ -52,18 +52,7 @@
         FROM
         <include refid="Table_Name"/>
         WHERE
-        <if test="id != 0 ">
-            id = #{id}
-        </if>
-        <if test="accessToken != null ">
-            access_token = #{accessToken}
-        </if>
-        <if test="app_user_id != 0 ">
-            access_token = #{accessToken}
-        </if>
-        <if test="app_type != 0 ">
-            app_type = #{appType}
-        </if>
+            access_token = #{accessToken} AND app_user_id = #{appUserId}
     </select>
 
     <select id="getSome" parameterType="com.iotep.free.entity.UserEntity" resultMap="BaseResultMap">
@@ -81,7 +70,7 @@
         FROM
         <include refid="Table_Name"/>
         u JOIN (
-        SELECT attention_id,created_time
+        SELECT attention_id,updated_time
         FROM
         <include refid="Social_Table_Name"/>
         WHERE user_id=#{userId}
@@ -96,7 +85,7 @@
         FROM
         <include refid="Table_Name"/>
         u JOIN (
-        SELECT user_id,created_time
+        SELECT user_id,updated_time
         FROM
         <include refid="Social_Table_Name"/>
         WHERE attention_id=#{attentionId}

@@ -51,7 +51,9 @@ public interface ActivityMapper {
     public int updateCommentOrLikeCountAdd(int activityId,int commentCount, int likeCount);
 
     /**
+     *
      * @param userId
+     * @param type
      * @param start
      * @param limit
      * @return
@@ -60,11 +62,28 @@ public interface ActivityMapper {
 
     /**
      * @param userId
+     * @param type
+     *
+     * @return
+     */
+    public int findUserActivityListCount(int userId,int type);
+
+    /**
+     * @param userId
      * @param start
      * @param limit
      * @return
      */
     public List<ActivityListEntity> findUserRaffleActivityList(int userId,int start,int limit);
+
+    /**
+     *
+     * @param userId
+     *
+     * @return
+     */
+    public int findUserRaffleActivityListCount(int userId);
+
 
     /**
      *

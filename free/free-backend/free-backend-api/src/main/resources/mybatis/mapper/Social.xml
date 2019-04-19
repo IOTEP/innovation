@@ -50,17 +50,17 @@
         (#{userId},#{attentionId},#{status})
     </insert>
 
-    <select id="socailAttentionCount" >
+    <select id="socailAttentionCount" resultType="java.lang.Integer">
         SELECT
-        count(1)
+        count(*)
         FROM
         <include refid="Table_Name"/>
         WHERE user_id=#{userId} AND status=1
     </select>
 
-    <select id="socailFansCount" >
+    <select id="socailFansCount" resultType="java.lang.Integer">
         SELECT
-        count(1)
+        count(*)
         FROM
         <include refid="Table_Name"/>
         WHERE attention_id=#{attentionId} AND status=1
