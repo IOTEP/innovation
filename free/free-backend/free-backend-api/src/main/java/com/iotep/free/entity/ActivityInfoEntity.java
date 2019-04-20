@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,8 +38,8 @@ public class ActivityInfoEntity {
     private Integer likeCount;
     private Integer userId;
     private String bussinessName;
-    private long startTime;
-    private long endTime;
-    private long createdTime;
-    private long updatedTime;
+    private Date startTime;
+    private Date endTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

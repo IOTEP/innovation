@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yongwei7 on 2019/3/29.
  */
@@ -20,11 +22,11 @@ public class ReplyEntity {
     private Integer fromUid;
     private Integer toUid;
     private Integer status;
-    private String cotent;
+    private String content;
     private String nick;
     private String photo;
     private Integer likeCount;
     private Integer isLike;
-    private long createTime;
-    private long updateTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yongwei7 on 2019/3/30.
  */
@@ -18,6 +20,6 @@ public class LikeEntity {
     private Integer typeId;
     private Integer userId;
     private Integer status;
-    private long createdTime;
-    private long updatedTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

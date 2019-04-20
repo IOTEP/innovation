@@ -109,7 +109,7 @@ public class ActionService {
                 succ = replyMapper.updateCommentReply(replyEntity);
             }else{
                 replyEntity.setFromUid(userId);
-                replyEntity.setCotent(content);
+                replyEntity.setContent(content);
                 replyEntity.setCommentId(commentId);
                 replyEntity.setReplyType(replyType);
                 replyEntity.setReplyId(replyId);

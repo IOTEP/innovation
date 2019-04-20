@@ -55,13 +55,13 @@
             access_token = #{accessToken} AND app_user_id = #{appUserId}
     </select>
 
-    <select id="getSome" parameterType="com.iotep.free.entity.UserEntity" resultMap="BaseResultMap">
+    <select id="getSome"  resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         <include refid="Table_Name"/>
         WHERE
-        id IN (#{userEntityList})
+        id IN (#{userList})
     </select>
 
     <select id="getSocailAttention"  resultMap="BaseResultMap">

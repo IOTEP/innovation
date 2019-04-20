@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yaqiang on 2019/3/27 下午1:51
  */
@@ -19,7 +21,7 @@ public class RaffleEntity {
     private Integer prizeId;
     private Integer prizeType;
     private Integer status;
-    private long raffle_time;
-    private long createdTime;
-    private long updatedTime;
+    private Date raffle_time;
+    private Date createdTime;
+    private Date updatedTime;
 }

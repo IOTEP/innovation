@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yaqiang on 2019/3/27 下午1:51
  */
@@ -20,6 +22,6 @@ public class PrizeEntity {
     private Integer prizeNumber;
     private Integer status;
     private String name;
-    private long createdTime;
-    private long updatedTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

@@ -34,7 +34,7 @@
         where user_id=#{userId} AND attention_id=#{attentionId}
     </update>
 
-    <select id="isSocial" resultMap="BaseResultMap">
+    <select id="isSocial" parameterType="com.iotep.free.entity.SocialEntity" resultType="java.lang.Integer">
         SELECT
         count(1)
         FROM

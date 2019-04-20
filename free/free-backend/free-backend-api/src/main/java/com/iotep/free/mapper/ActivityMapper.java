@@ -13,17 +13,19 @@ import java.util.List;
 @Mapper
 public interface ActivityMapper {
     /**
+     *
      * @param start
      * @param limit
      * @return
      */
-    public List<ActivityListEntity> findActivityList(int sort,int start,int limit);
+    public List<ActivityListEntity> findActivityList(@Param("sort") int sort, @Param("start") int start, @Param("limit") int limit);
 
     /**
      *
+     * @param sort
      * @return
      */
-    public int findActivityListCount(@Param("sort")int sort);
+    public int findActivityListCount(int sort);
 
     /**
      *
@@ -56,25 +58,28 @@ public interface ActivityMapper {
      * @param type
      * @param start
      * @param limit
+     *
      * @return
      */
-    public List<ActivityListEntity> findUserActivityList(int userId,int type,int start,int limit);
+    public List<ActivityListEntity> findUserActivityList(@Param("userId") int userId, @Param("type") int type, @Param("start") int start, @Param("limit") int limit);
 
     /**
+     *
      * @param userId
      * @param type
      *
      * @return
      */
-    public int findUserActivityListCount(int userId,int type);
+    public int findUserActivityListCount(@Param("userId") int userId,@Param("type") int type);
 
     /**
+     *
      * @param userId
      * @param start
      * @param limit
      * @return
      */
-    public List<ActivityListEntity> findUserRaffleActivityList(int userId,int start,int limit);
+    public List<ActivityListEntity> findUserRaffleActivityList(@Param("userId") int userId,@Param("start") int start,@Param("limit") int limit);
 
     /**
      *

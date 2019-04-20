@@ -2,6 +2,7 @@ package com.iotep.free.mapper;
 
 import com.iotep.free.entity.UserActivityEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserActivityMapper {
      * @param activityIdList
      * @return
      */
-    public List<UserActivityEntity> findUserActivityList(int userId,String activityIdList);
+    public List<UserActivityEntity> findUserActivityListByCond(@Param("userId") int userId, @Param("activityIdList") String activityIdList);
 
     /**
      * @param userActivity

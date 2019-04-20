@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yongwei7 on 2019/3/29.
  */
@@ -23,6 +25,6 @@ public class CommentEntity {
     private Integer likeCount;
     private Integer commentCount;
     private Integer isLike;
-    private long createTime;
-    private long updateTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

@@ -125,4 +125,60 @@ public class ActionController {
         return ResponseData;
     }
 
+    /**************2.6 参与抽奖行为 ***************/
+    @RequestMapping(value = "/raffle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseData actionRaffle(@RequestBody Map map) {
+        ResponseData ResponseData = new ResponseData();
+
+        if (!map.containsKey("activityId") || !map.containsKey("userId") || !map.containsKey("attentionId")) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
+        int activityId = Integer.parseInt(map.get("activityId").toString());
+        int userId = Integer.parseInt(map.get("userId").toString());
+        int attentionId = Integer.parseInt(map.get("attentionId").toString());
+
+        try {
+            ResponsePageData responsePageData = new ResponsePageData<>();
+
+            int succ = actionService.joinRaffleAction(userId, activityId, attentionId);
+            if(succ <= 0){
+                return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
+            }
+            //ResponseData.setData(succ);
+        } catch (Exception e) {
+            ResponseData.setErrNo(ReturnCode.DB_EXCEPTION.getK());
+            ResponseData.setErrMessage(ReturnCode.DB_EXCEPTION.getV());
+
+        }
+        return ResponseData;
+    }
+
+    /**************3.5 添加关注行为 ***************/
+    @RequestMapping(value = "/attention", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseData actionAttention(@RequestBody Map map) {
+        ResponseData ResponseData = new ResponseData();
+
+        if (!map.containsKey("action") || !map.containsKey("userId") || !map.containsKey("attentionId")) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
+        int action = Integer.parseInt(map.get("action").toString());
+        int userId = Integer.parseInt(map.get("userId").toString());
+        int attentionId = Integer.parseInt(map.get("attentionId").toString());
+
+        try {
+            ResponsePageData responsePageData = new ResponsePageData<>();
+
+            int succ = actionService.socialAction(userId, attentionId, action);
+            if(succ <= 0){
+                return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
+            }
+            //ResponseData.setData(succ);
+        } catch (Exception e) {
+            ResponseData.setErrNo(ReturnCode.DB_EXCEPTION.getK());
+            ResponseData.setErrMessage(ReturnCode.DB_EXCEPTION.getV());
+
+        }
+        return ResponseData;
+    }
+
 }

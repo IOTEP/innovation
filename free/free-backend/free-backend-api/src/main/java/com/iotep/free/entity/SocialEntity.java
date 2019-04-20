@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yongwei7 on 2019/3/29.
  */
@@ -17,6 +19,6 @@ public class SocialEntity {
     private Integer userId;
     private Integer attentionId;
     private Integer status;
-    private long createTime;
-    private long updateTime;
+    private Date createTime;
+    private Date updateTime;
 }

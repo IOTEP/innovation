@@ -37,7 +37,7 @@ public class ActivityController {
 
         try {
             int sort = -1;
-            if (!map.containsKey("sort")){
+            if (map.containsKey("sort")){
                 sort = Integer.parseInt(map.get("sort").toString());
             }
             int page = 1;
@@ -76,7 +76,7 @@ public class ActivityController {
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
         int userId = 0;
-        if (!map.containsKey("userId")){
+        if (map.containsKey("userId")){
             userId = Integer.parseInt(map.get("userId").toString());
         }
 
@@ -102,7 +102,7 @@ public class ActivityController {
 
         try {
             int sort = -1;
-            if (!map.containsKey("sort")){
+            if (map.containsKey("sort")){
                 sort = Integer.parseInt(map.get("sort").toString());
             }
             int page = 1;
@@ -141,13 +141,13 @@ public class ActivityController {
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
         int userId = 0;
-        if (!map.containsKey("userId")){
+        if (map.containsKey("userId")){
             userId = Integer.parseInt(map.get("userId").toString());
         }
 
         try {
             int sort = -1;
-            if (!map.containsKey("sort")){
+            if (map.containsKey("sort")){
                 sort = Integer.parseInt(map.get("sort").toString());
             }
             int page = 1;
@@ -187,13 +187,13 @@ public class ActivityController {
         }
         int commentId = Integer.parseInt(map.get("commentId").toString());
         int userId = 0;
-        if (!map.containsKey("userId")){
+        if (map.containsKey("userId")){
             userId = Integer.parseInt(map.get("userId").toString());
         }
 
         try {
             int sort = -1;
-            if (!map.containsKey("sort")){
+            if (map.containsKey("sort")){
                 sort = Integer.parseInt(map.get("sort").toString());
             }
             int page = 1;

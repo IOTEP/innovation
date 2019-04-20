@@ -43,7 +43,7 @@ public class ActivityService {
             }
             activityIdListStr = StringUtil.hashsetIntToString(activityIdList);
             //是否参加活动
-            List<UserActivityEntity> userActivityEntity = userActivityMapper.findUserActivityList(userId,activityIdListStr);
+            List<UserActivityEntity> userActivityEntity = userActivityMapper.findUserActivityListByCond(userId,activityIdListStr);
             for(int i =0; i< userActivityEntity.size(); i++){
                 joinActivityIdList.add(userActivityEntity.get(i).getActivityId());
             }
@@ -69,14 +69,14 @@ public class ActivityService {
         if(activityInfoEntity.getId() > 0) {
             if(userId > 0) {
                 //是否参加活动
-                List<UserActivityEntity> userActivityEntity = userActivityMapper.findUserActivityList(userId, activityId + "");
+                List<UserActivityEntity> userActivityEntity = userActivityMapper.findUserActivityListByCond(userId, activityId + "");
                 if (userActivityEntity.size() > 0) {
                     activityInfoEntity.setIsJoin(1);
                 }
 
                 //活动是否点赞
                 LikeEntity likeEntity= likeMapper.getOneLike(userId,1,activityId);
-                if(likeEntity.getStatus() == 1){
+                if(likeEntity !=null && likeEntity.getStatus() == 1){
                     activityInfoEntity.setIsLike(1);
                 }
 
@@ -121,7 +121,6 @@ public class ActivityService {
     }
 
     public List<UserEntity> findActivityUserList(int activityId, int sort, int start, int limit) {
-        System.out.println(sort);
         return userMapper.findActivityUserList(activityId,sort,start,limit);
     }
 
@@ -130,7 +129,6 @@ public class ActivityService {
     }
 
     public List<CommentEntity> findActivityCommentList(int userId,int activityId,int sort, int start, int limit) {
-        System.out.println(sort);
         List<CommentEntity> commentList = new ArrayList<>();
         List<Integer> commentIdList = new ArrayList<>();
         List<Integer> userIdList = new ArrayList<>();
@@ -183,7 +181,6 @@ public class ActivityService {
     }
 
     public List<ReplyEntity> findActivityCommentReplyList(int userId, int commentId, int sort, int start, int limit) {
-        System.out.println(sort);
         List<ReplyEntity> replyList = new ArrayList<>();
         List<Integer> replyIdList = new ArrayList<>();
         List<Integer> userIdList = new ArrayList<>();
@@ -193,12 +190,15 @@ public class ActivityService {
             replyIdList.add(tmp.getId());
             userIdList.add(tmp.getFromUid());
         }
+
         if(replyIdList.size() > 0 && userIdList.size() > 0){
             String replyIdListStr = StringUtil.listIntToString(replyIdList);
             String userIdListStr = StringUtil.listIntToString(userIdList);
             HashSet<Integer> likeListSet = new HashSet<>();
             Map<Integer,UserEntity> userListMap = new HashMap<>();
 
+            System.out.println(1);
+            System.out.println(userId);
             //评论是否本用户点赞
             if(userId > 0) {
                 List<LikeEntity> likeList = likeMapper.getLikeByUserId(userId, 3, replyIdListStr);

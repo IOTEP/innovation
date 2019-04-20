@@ -25,17 +25,14 @@
         (#{userId},#{activityId})
     </insert>
 
-    <select id="findUserActivityList" resultMap="BaseResultMap">
+    <select id="findUserActivityListByCond" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         <include refid="Table_Name"/>
-        WHERE
+        WHERE  user_id=#{userId}
         <if test="activityIdList != null">
-            activity_id IN (activityIdList)
-        </if>
-        <if test="userId != 0">
-            user_id=#{userId}
+            AND activity_id IN ( #{activityIdList} )
         </if>
     </select>
 

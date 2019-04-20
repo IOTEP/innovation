@@ -23,6 +23,28 @@
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap id="ActivityInfoBaseResultMap" type="com.iotep.free.entity.ActivityInfoEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="picture_url_array" property="pictureUrlArray" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="raffle_mode" property="raffleMode" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="is_end" property="isEnd" jdbcType="TINYINT"/>
+        <result column="upper_limit" property="upperLimit" jdbcType="INTEGER"/>
+        <result column="join_limit" property="joinLimit" jdbcType="INTEGER"/>
+        <result column="activity_mode" property="activityMode" jdbcType="TINYINT"/>
+        <result column="comment_count" property="commentCount" jdbcType="INTEGER"/>
+        <result column="like_count" property="likeCount" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="bussiness_name" property="bussinessName" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="created_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
     <sql id="Activity_Table_Name">
         t_activity
     </sql>
@@ -36,7 +58,7 @@
     </sql>
 
     <sql id="Base_Column_List">
-        id,name,picture_url_array,remark,content,raffle_mode,status,is_end,upper_limit,join_limit,activity_mode,comment_count,like_count,bussiness_name,start_time,end_time, created_time,updated_time
+        id,name,picture_url_array,remark,content,raffle_mode,status,is_end,upper_limit,join_limit,activity_mode,comment_count,like_count,user_id,bussiness_name,start_time,end_time, created_time,updated_time
     </sql>
 
     <select id="findActivityList" resultMap="ActivityListBaseResultMap">
@@ -48,13 +70,21 @@
         limit #{start},#{limit}
     </select>
 
+    <select id="findActivityInfo" resultMap="ActivityInfoBaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Activity_Table_Name"/>
+        WHERE id=#{activityId}
+    </select>
+
     <select id="findUserActivityList"  resultMap="ActivityListBaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         <include refid="Activity_Table_Name"/>
         u JOIN (
-        SELECT activity_id,created_time
+        SELECT activity_id
         FROM
         <include refid="User_Activity_Table_Name"/>
         WHERE user_id=#{userId}

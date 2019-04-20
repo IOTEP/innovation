@@ -31,7 +31,7 @@
         limit #{start},#{limit}
     </select>
 
-    <select id="findActivityReplyListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="findActivityCommentReplyListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT
         count(*)
         FROM

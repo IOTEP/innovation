@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 /**
  * Created by yongwei7 on 2019/3/28.
  */
@@ -29,8 +31,8 @@ public class ActivityListEntity {
     private Integer likeCount;
     private Integer userId;
     private String bussinessName;
-    private long startTime;
-    private long endTime;
-    private long createdTime;
-    private long updatedTime;
+    private Date startTime;
+    private Date endTime;
+    private Date createdTime;
+    private Date updatedTime;
 }
