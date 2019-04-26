@@ -1,0 +1,53 @@
+.comment{
+  width: 100%;
+  // height: 30PX; 
+  display: flex;
+  box-sizing: border-box;
+  position: fixed;
+  background: #ffffff;
+  left: 0;
+  bottom: 0;
+  // position: relative;
+  padding: 8PX 16PX;
+  align-items: center;
+  &:after {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-top: 1PX solid #999999;
+    content: "";
+  }
+  .left{
+    flex: 1;
+    .comment_star{
+      width: 100%;
+      height: 30PX;
+      background: #f0f0f0;
+      border-radius: 30PX;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding-left: 0.3rem;
+    }
+    .text{
+      font-size: 0.6rem;
+      color: #666666;
+      margin-left: 0.4rem;
+    }
+  }
+  .right{
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    .icon-left{
+      flex: 1;
+      text-align: center;
+    }
+    .icon-right{
+      flex: 1;
+      text-align: center;
+    }
+  }
+}
