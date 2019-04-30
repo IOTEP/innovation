@@ -10,6 +10,7 @@ import com.iotep.free.constant.ReturnCode;
 import com.iotep.free.entity.ActivityListEntity;
 import com.iotep.free.entity.UserEntity;
 import com.iotep.free.service.UserService;
+import com.iotep.free.util.JwtTokenUtil;
 import com.iotep.free.util.ParamUtil;
 import com.iotep.free.util.RedisUtil;
 import com.iotep.free.util.SmsUtil;
@@ -54,6 +55,7 @@ public class UserController extends CommonController {
         }
 
         String code = SmsUtil.getCode();
+        code = "123456";
         System.out.println(code);
         int succ = 0;
         //succ = SmsUtil.sendSmsCode(phone,code);
@@ -74,13 +76,26 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData login(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
-        if (!map.containsKey("accessToken") || !map.containsKey("appType") || !map.containsKey("appUserId")  ) {
+        if ( !map.containsKey("appType") || !map.containsKey("appUserId") || !map.containsKey("code")  ) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
+
+        String appUserId = map.get("appUserId").toString();
+        String code = map.get("code").toString();
+
+        String res = redisUtil.get("loginSms_"+appUserId, RedisConstants.datebase4);
+        System.out.println(res);
+        if(StringUtils.isEmpty(res) || !res.equals(code)){
+            logger.info("登陆信息不匹配="+appUserId+"_"+code);
+            return ResponseData.build(ResponseCode.SERVICE_LOGIN_CODE_ERROR);
+        }
+
         UserEntity user = new UserEntity();
-        user.setAccessToken(map.get("accessToken").toString());
-        user.setAppType(Integer.parseInt(map.get("appType").toString()));
-        user.setAppUserId(map.get("appUserId").toString());
+        //user.setAccessToken(map.get("accessToken").toString());
+        //第一期只支持手机号登陆 校验登陆
+        user.setAppType(0);
+        user.setType(1);
+        user.setAppUserId(appUserId);
         user.setId(0);
 
         //校验accessToken
@@ -91,7 +106,17 @@ public class UserController extends CommonController {
         if (map.containsKey("photo")){
             user.setNick(map.get("photo").toString());
         }
+
         UserEntity u = userService.loginUser(user);
+        if(u != null) {
+            String token = JwtTokenUtil.createToken(u.getId()+"",true);
+            //存code进入redis  设置超时时间10分钟
+            redisUtil.set("login_"+u.getId(),token, RedisConstants.datebase1);
+            Long resExpire = redisUtil.expire("login_"+token, 3600*24*7, RedisConstants.datebase1);//设置key过期时间
+            logger.info("resExpire="+resExpire);
+            u.setAccessToken(token);
+            redisUtil.del("loginSms_" + appUserId);
+        }
 
         ResponseData.setData(u);
         return ResponseData;
@@ -108,7 +133,8 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/info", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData getOneInfo(@RequestBody UserEntity userEntity) {
         ResponseData ResponseData = new ResponseData();
-        int myUserId = 0;  //待修改
+
+        int myUserId = userEntity.getMyUserId();
         UserEntity u = userService.findUserInfo(userEntity,myUserId);
         ResponseData.setData(u);
         return ResponseData;

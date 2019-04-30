@@ -28,6 +28,7 @@ public class UserEntity {
     private Integer joinActivityCount;
     private Integer createActivityCount;
     private Integer raffleActivityCount;
+    private Integer myUserId;
     private Date createdTime;
     private Date updatedTime;
 }

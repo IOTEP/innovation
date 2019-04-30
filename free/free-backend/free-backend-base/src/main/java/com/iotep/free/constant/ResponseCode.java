@@ -11,7 +11,8 @@ public enum ResponseCode {
     SIGN_ERROR(1003, "签名错误"),
     PRAME_ERROR(1004, "参数错误"),
     SERVICE_RESULT_ERROR(1005, "请求service错误"),
-    SERVICE_SMS_ERROR(1006, "请求sms错误");
+    SERVICE_SMS_ERROR(1006, "请求sms错误"),
+    SERVICE_LOGIN_CODE_ERROR(1007, "登陆错误");
 
     private Integer code;
     private String msg;

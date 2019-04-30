@@ -2,6 +2,7 @@ package com.iotep.free.config;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
+import com.iotep.free.util.JwtTokenUtil;
 import com.iotep.free.util.StringJsonUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,8 @@ import java.util.Set;
  */
 public class ParameterRequestWrapper  extends HttpServletRequestWrapper {
     private Map<String , String[]> params = new HashMap<String, String[]>();
+    /*@Autowired
+    RedisUtil redisUtil;*/
 
     public ParameterRequestWrapper(HttpServletRequest request) {
         // 将request交给父类，以便于调用对应方法的时候，将其输出，其实父亲类的实现方式和第一种new的方式类似
@@ -50,7 +53,32 @@ public class ParameterRequestWrapper  extends HttpServletRequestWrapper {
         }
         System.out.println("2转化前参数："+json);
         Map<String,Object> map= StringJsonUtils.jsonStringToMap(json);
-        map.put("myUserId",66);
+
+        //String url = super.getRemoteAddr();
+        HttpServletRequest request = (HttpServletRequest)super.getRequest();
+        String url = request.getRequestURL().toString();
+        String[] sourceStrArray = url.split("/");
+        if(sourceStrArray[sourceStrArray.length-1].contains("login")){
+
+        }
+        System.out.println(url);
+
+        //token转成myUserID
+        if(map.containsKey("token") && !JwtTokenUtil.isExpiration((String) map.get("token"))) {
+            String token = (String) map.get("token");
+            String userName = JwtTokenUtil.getUsername(token);
+
+            if (!StringUtils.isEmpty(userName) ) {
+                //RedisUtil redisUtil = new RedisUtil();
+                //String res = redisUtil.get("login_"+userName, RedisConstants.datebase1);
+
+                //System.out.println(res);
+                //if(!StringUtils.isEmpty(res) && res.equals(token)){
+                    map.put("myUserId", Integer.parseInt(userName));
+                //}
+            }
+        }
+
         System.out.println("2转化后参数："+JSON.toJSONString(map));
         ByteArrayInputStream bis = new ByteArrayInputStream(JSON.toJSONString(map).getBytes("utf-8"));
         return new MyServletInputStream(bis);

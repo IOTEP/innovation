@@ -52,7 +52,7 @@
         FROM
         <include refid="Table_Name"/>
         WHERE
-            access_token = #{accessToken} AND app_user_id = #{appUserId}
+            app_type = #{appType} AND app_user_id = #{appUserId}
     </select>
 
     <select id="getSome"  resultMap="BaseResultMap">

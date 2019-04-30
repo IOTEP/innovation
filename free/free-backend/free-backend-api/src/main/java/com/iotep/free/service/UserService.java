@@ -29,10 +29,13 @@ public class UserService {
 
     public UserEntity loginUser(UserEntity userEntity) {
         UserEntity one = userMapper.getOne(userEntity);
-        if(one.getId() > 0){  //存在更新
+        if(one!=null && one.getId() > 0){  //存在更新
             //更新token
         }else{    //不存在插入
-            userMapper.insertUser(userEntity);
+            int succ = userMapper.insertUser(userEntity);
+            if(succ > 0){
+                one = userEntity;
+            }
         }
         return one;
     }

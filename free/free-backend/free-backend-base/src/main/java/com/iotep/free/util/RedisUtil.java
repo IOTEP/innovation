@@ -23,7 +23,7 @@ import java.util.Set;
 @Slf4j
 public class RedisUtil {
     @Autowired
-    private JedisPool jedisPool;
+    public JedisPool jedisPool;
 
     /**
      * <p>
