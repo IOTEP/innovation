@@ -18,10 +18,12 @@ public interface LikeMapper {
     public List<LikeEntity> getLikeByUserId(@Param("userId") int userId, @Param("likeType") int likeType, @Param("typeIdList") String typeIdList);
 
     /**
+     *
+     * @param like
      * @return
-     * @Param limit
+     *
      */
-    public LikeEntity getOneLike(@Param("userId") int userId, @Param("likeType") int likeType, @Param("typeId") int typeId);
+    public LikeEntity getOneLike(LikeEntity like);
 
     /**
      *
@@ -29,6 +31,13 @@ public interface LikeMapper {
      * @return
      */
     public int insertLike(LikeEntity like);
+
+    /**
+     *
+     * @param like
+     * @return
+     */
+    public int replaceLike(LikeEntity like);
 
     /**
      *

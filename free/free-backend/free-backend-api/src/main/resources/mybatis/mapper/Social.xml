@@ -30,9 +30,17 @@
         update
         <include refid="Table_Name"/>
         set
-        status = #{status},
+        status = #{status}
         where user_id=#{userId} AND attention_id=#{attentionId}
     </update>
+
+    <select id="getOneSocial" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE user_id=#{userId} AND attention_id=#{attentionId}
+    </select>
 
     <select id="isSocial" parameterType="com.iotep.free.entity.SocialEntity" resultType="java.lang.Integer">
         SELECT

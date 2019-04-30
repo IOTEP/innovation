@@ -1,14 +1,20 @@
 package com.iotep.free.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.iotep.free.bean.Pagination;
 import com.iotep.free.bean.ResponseData;
 import com.iotep.free.bean.ResponsePageData;
+import com.iotep.free.constant.RedisConstants;
 import com.iotep.free.constant.ResponseCode;
 import com.iotep.free.constant.ReturnCode;
 import com.iotep.free.entity.ActivityListEntity;
 import com.iotep.free.entity.UserEntity;
 import com.iotep.free.service.UserService;
 import com.iotep.free.util.ParamUtil;
+import com.iotep.free.util.RedisUtil;
+import com.iotep.free.util.SmsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,15 +25,51 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yaqiang on 2019/3/24 下午3:21
+ * Created by yongwei7 on 2019/3/24 下午3:21
  */
 
 @RestController
 @RequestMapping(value = "/user")
-public class UserController {
+public class UserController extends CommonController {
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
+    RedisUtil redisUtil;
+    @Autowired
     private UserService userService;
+
+    @RequestMapping(value = "/loginSendSms", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseData loginSendSms(@RequestBody Map map) {
+        ResponseData ResponseData = new ResponseData();
+        if (!map.containsKey("phone")  ) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
+        String phone = map.get("phone").toString();
+        //phone 格式校验&读redis看是否已发送验证码
+        String res = redisUtil.get("loginSms_"+phone, RedisConstants.datebase4);
+        System.out.println(res);
+        if(!StringUtils.isEmpty(res)){
+            ResponseData.setErrMessage("已发送过验证码");
+            return ResponseData;
+        }
+
+        String code = SmsUtil.getCode();
+        System.out.println(code);
+        int succ = 0;
+        //succ = SmsUtil.sendSmsCode(phone,code);
+        System.out.println("after:"+succ);
+
+        //校验accessToken
+        if(succ != 0) {
+            return ResponseData.build(ResponseCode.SERVICE_SMS_ERROR);
+        }else{
+            //存code进入redis  设置超时时间10分钟
+            redisUtil.set("loginSms_"+phone,code, RedisConstants.datebase4);
+            Long resExpire = redisUtil.expire("loginSms_"+phone, 600, RedisConstants.datebase4);//设置key过期时间
+            logger.info("resExpire="+resExpire);
+        }
+        return ResponseData;
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData login(@RequestBody Map map) {
@@ -93,6 +135,7 @@ public class UserController {
         ResponseData ResponseData = new ResponseData();
 
         int userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = Integer.parseInt(map.get("myUserId").toString());
 
         try {
             int sort = -1;
@@ -111,6 +154,7 @@ public class UserController {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
             System.out.println(userId);
+            System.out.println(myUserId);
             List<UserEntity> dataList = userService.userAttentionList(userId, sort, pagination.getStart(), pagination.getLimit());
 
             responsePageData.setDataList(dataList);

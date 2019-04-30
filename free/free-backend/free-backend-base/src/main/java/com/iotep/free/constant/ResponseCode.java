@@ -10,7 +10,8 @@ public enum ResponseCode {
     REQUEST_TIMEOUT(1002, "请求超时"),
     SIGN_ERROR(1003, "签名错误"),
     PRAME_ERROR(1004, "参数错误"),
-    SERVICE_RESULT_ERROR(1005, "请求service错误");
+    SERVICE_RESULT_ERROR(1005, "请求service错误"),
+    SERVICE_SMS_ERROR(1006, "请求sms错误");
 
     private Integer code;
     private String msg;

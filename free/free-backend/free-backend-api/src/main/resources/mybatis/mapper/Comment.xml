@@ -44,11 +44,13 @@
         <include refid="Comment_Table_Name"/>
         <set>
             <if test="content != null ">
-                content = #{content},
+                content = #{content}
             </if>
-            status = #{status}
+            <if test="status >= 0">
+                status = #{status}
+            </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id}
     </update>
 
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="id" parameterType="com.iotep.free.entity.CommentEntity">
@@ -84,7 +86,5 @@
         </if>
         where id=#{commentId}
     </update>
-
-
 
 </mapper>

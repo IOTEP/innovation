@@ -63,7 +63,7 @@ public class ActivityService {
         return activityMapper.findActivityListCount(sort);
     }
 
-    public ActivityInfoEntity findActivityInfo(int activityId,int userId) {
+    public ActivityInfoEntity findActivityInfo(int userId,int activityId) {
         ActivityInfoEntity activityInfoEntity = activityMapper.findActivityInfo(activityId);
 
         if(activityInfoEntity.getId() > 0) {
@@ -75,7 +75,11 @@ public class ActivityService {
                 }
 
                 //活动是否点赞
-                LikeEntity likeEntity= likeMapper.getOneLike(userId,1,activityId);
+                LikeEntity like = new LikeEntity();
+                like.setUserId(userId);
+                like.setTypeId(activityId);
+                like.setLikeType(1);
+                LikeEntity likeEntity= likeMapper.getOneLike(like);
                 if(likeEntity !=null && likeEntity.getStatus() == 1){
                     activityInfoEntity.setIsLike(1);
                 }

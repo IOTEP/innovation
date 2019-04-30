@@ -146,26 +146,28 @@
     <update id="updateCommentOrLikeCountSub" >
         update
         <include refid="Activity_Table_Name"/>
-        set
-        <if test="commentCount != 0 ">
-            comment_count = IF(comment_count &lt; 1, 0, comment_count -1)
-        </if>
-        <if test="likeCount != 0 ">
-            like_count = IF(like_count &lt; 1, 0, like_count -1)
-        </if>
+        <set>
+            <if test="commentCount != 0 ">
+                comment_count = IF(comment_count &lt; 1, 0, comment_count -1)
+            </if>
+            <if test="likeCount != 0 ">
+                like_count = IF(like_count &lt; 1, 0, like_count -1)
+            </if>
+        </set>
         where id=#{activityId}
     </update>
 
     <update id="updateCommentOrLikeCountAdd" >
         update
         <include refid="Activity_Table_Name"/>
-        set
-        <if test="commentCount != 0 ">
-            comment_count =  comment_count + 1
-        </if>
-        <if test="likeCount != 0 ">
-            like_count = like_count + 1
-        </if>
+        <set>
+            <if test="commentCount != 0 ">
+                comment_count = comment_count + 1
+            </if>
+            <if test="likeCount != 0 ">
+                like_count = like_count + 1
+            </if>
+        </set>
         where id=#{activityId}
     </update>
 

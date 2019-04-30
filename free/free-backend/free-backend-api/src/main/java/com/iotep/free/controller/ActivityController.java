@@ -8,6 +8,8 @@ import com.iotep.free.constant.ReturnCode;
 import com.iotep.free.entity.*;
 import com.iotep.free.service.ActivityService;
 import com.iotep.free.util.ParamUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,9 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/activity")
-public class ActivityController {
+public class ActivityController extends CommonController {
+    private Logger logger = LoggerFactory.getLogger(ActivityController.class);
+
     @Autowired
     private ActivityService activityService;
 
@@ -34,6 +38,9 @@ public class ActivityController {
         if (!map.containsKey("userId")){
             userId = Integer.parseInt(map.get("userId").toString());
         }
+        System.out.println("list");
+        logger.info("userId:" + userId);
+
 
         try {
             int sort = -1;
@@ -75,7 +82,7 @@ public class ActivityController {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
-        int userId = 0;
+        int userId = -1;
         if (map.containsKey("userId")){
             userId = Integer.parseInt(map.get("userId").toString());
         }

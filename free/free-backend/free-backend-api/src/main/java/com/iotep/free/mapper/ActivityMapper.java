@@ -36,21 +36,16 @@ public interface ActivityMapper {
 
     /**
      *
-     * @param activityId
-     * @param commentCount
      * @param likeCount
      * @return
      */
-    public int updateCommentOrLikeCountSub(int activityId,int commentCount, int likeCount);
+    public int updateCommentOrLikeCountSub(@Param("activityId") int activityId,@Param("commentCount") int commentCount,@Param("likeCount") int likeCount);
 
     /**
      *
-     * @param activityId
-     * @param commentCount
-     * @param likeCount
      * @return
      */
-    public int updateCommentOrLikeCountAdd(int activityId,int commentCount, int likeCount);
+    public int updateCommentOrLikeCountAdd(@Param("activityId") int activityId,@Param("commentCount") int commentCount,@Param("likeCount") int likeCount);
 
     /**
      *

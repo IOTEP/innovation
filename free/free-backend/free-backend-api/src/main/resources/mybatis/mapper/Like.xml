@@ -33,7 +33,14 @@
         <include refid="Base_Column_List"/>
         FROM
         <include refid="Table_Name"/>
-        WHERE user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+        <where>
+          <if test=" id > 0">
+              id = #{id}
+          </if>
+          <if test="userId > 0 and likeType > 0 and typeId > 0">
+              user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+          </if>
+        </where>
     </select>
 
     <insert id="insertLike" useGeneratedKeys="true" keyProperty="id" >
@@ -41,15 +48,30 @@
         <include refid="Table_Name"/>
         (like_type,type_id,user_id,status)
         values
-        (#{likeType},#{typeId},#{userId},#{action})
+        (#{likeType},#{typeId},#{userId},#{status})
+    </insert>
+
+    <insert id="replaceLike" useGeneratedKeys="true" keyProperty="id" >
+        replace into
+        <include refid="Table_Name"/>
+        (like_type,type_id,user_id,status)
+        values
+        (#{likeType},#{typeId},#{userId},#{status})
     </insert>
 
     <update id="updateLike" >
         update
         <include refid="Table_Name"/>
         set
-        status = #{action},
-        where user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+        status = #{status}
+        <where>
+            <if test=" id > 0">
+                id = #{id}
+            </if>
+            <if test="userId > 0 and likeType > 0 and typeId > 0">
+                user_id=#{userId} AND like_type=#{likeType} AND type_id=#{typeId}
+            </if>
+        </where>
     </update>
 
     <delete id="deleteLike"  >

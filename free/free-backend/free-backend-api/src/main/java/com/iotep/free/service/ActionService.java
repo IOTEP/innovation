@@ -3,6 +3,8 @@ package com.iotep.free.service;
 import com.iotep.free.entity.*;
 import com.iotep.free.mapper.*;
 import com.iotep.free.util.RaffleUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.List;
  */
 @Service
 public class ActionService {
+    private Logger logger = LoggerFactory.getLogger(ActionService.class);
+
     @Autowired
     private CommentMapper commentMapper;
     @Autowired
@@ -30,29 +34,45 @@ public class ActionService {
     private PrizeMapper prizeMapper;
     @Autowired
     private RaffleMapper raffleMapper;
+    @Autowired
+    private UserMapper userMapper;
 
 
     /**** 添加&删除点赞 ***/
     public int likeAction(int userId, int likeId, int likeType, int typeId, int action) {
         int succ = 1;
+        int updateFlag = 0;
 
         LikeEntity likeEntity = new LikeEntity();
-        if (action == 0) { //取消点赞
-            likeEntity.setId(likeId);
-            likeEntity.setStatus(0);
-            succ = likeMapper.updateLike(likeEntity);
-        } else {
-            likeEntity.setLikeType(likeType);
-            likeEntity.setTypeId(typeId);
-            likeEntity.setUserId(userId);
+        likeEntity.setLikeType(likeType);
+        likeEntity.setTypeId(typeId);
+        likeEntity.setUserId(userId);
+        likeEntity.setId(likeId);
+        LikeEntity likeOld = likeMapper.getOneLike(likeEntity);
+
+        if(likeOld != null){   // 已有记录
+            if(likeOld.getStatus() != action){
+                likeEntity.setStatus(action);
+                succ = likeMapper.updateLike(likeEntity);
+                updateFlag = 1;
+            }else{
+                logger.info("记录已有，无需更新");
+            }
+        }else if(action != 0){ // 新加入记录不包括取消
             succ = likeMapper.insertLike(likeEntity);
+            updateFlag = 1;
         }
+        System.out.println(succ);
+        System.out.println(updateFlag);
 
         //同步点赞数
-        if(succ > 0){
+        if(succ > 0 && updateFlag==1){
             if (action == 0) {
+                likeType = likeOld.getLikeType();
+                typeId = likeOld.getTypeId();
                 switch (likeType) {
                     case 1:
+                        System.out.println("sub");
                         activityMapper.updateCommentOrLikeCountSub(typeId,0,1);
                         break;
                     case 2:
@@ -67,6 +87,7 @@ public class ActionService {
             }else{
                 switch (likeType) {
                     case 1:
+                        System.out.println("add");
                         activityMapper.updateCommentOrLikeCountAdd(typeId,0,1);
                         break;
                     case 2:
@@ -175,10 +196,18 @@ public class ActionService {
         socialEntity.setUserId(userId);
         socialEntity.setAttentionId(attentionId);
         socialEntity.setStatus(1);
-        int isSocial = 0;
+
+        /*int isSocial = 0;
         isSocial = socialMapper.isSocial(socialEntity);
         if(isSocial <= 0){
             socialMapper.replaceSocial(socialEntity);
+        }*/
+
+        SocialEntity socialOld = socialMapper.getOneSocial(socialEntity);
+        if(socialOld != null && socialOld.getStatus() != 1){
+            socialMapper.updateSocial(socialEntity);
+        }else{
+            socialMapper.insertSocial(socialEntity);
         }
 
         //加入抽奖
@@ -191,7 +220,7 @@ public class ActionService {
     }
 
     /**** 抽奖行为 ***/
-    public int raffleAction(int userId, int activityId) {
+    public int openRaffleAction(int userId, int activityId) {
         int succ = 1;
 
         //活动奖品
@@ -200,18 +229,19 @@ public class ActionService {
 
         if(prizeList.size() > 0) {
             //活动参与人
-            List<UserActivityEntity> activityUserList = new ArrayList<>();
+            //List<UserActivityEntity> activityUserList = new ArrayList<>();
             List<Integer> userList = new ArrayList<>();
-            activityUserList = userActivityMapper.findActivityUserList(activityId);
+            //activityUserList = userActivityMapper.findActivityUserList(activityId);
+            List<UserEntity>  activityUserList = userMapper.findActivityUserList(activityId,0,0,0);
             for (int i=0; i < activityUserList.size(); i++){
-                if(!userList.contains(activityUserList.get(i).getUserId())) {
-                    userList.add(activityUserList.get(i).getUserId());
+                if(!userList.contains(activityUserList.get(i).getId())) {
+                    userList.add(activityUserList.get(i).getId());
                 }
             }
 
             //随机抽奖
             List<RaffleEntity> raffleList = new ArrayList<>();
-            RaffleUtil.draw(prizeList,userList);
+            raffleList = RaffleUtil.draw(prizeList,userList);
 
             //批量写入中奖名单
             succ = raffleMapper.insertRaffleBatch(raffleList);

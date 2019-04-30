@@ -113,7 +113,9 @@
           WHERE activity_id=#{activityId}
         ) a ON u.id=a.user_id
         ORDER BY a.created_time DESC
-        limit #{start},#{limit}
+        <if test="limit > 0 ">
+            limit #{start},#{limit}
+        </if>
     </select>
 
     <select id="findActivityUserListCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">

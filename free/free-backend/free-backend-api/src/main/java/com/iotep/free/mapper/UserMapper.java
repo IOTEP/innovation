@@ -44,7 +44,7 @@ public interface UserMapper {
      * @param limit
      * @return
      */
-    public List<UserEntity> getSocailAttention(int userId, int start, int limit);
+    public List<UserEntity> getSocailAttention(@Param("userId") int userId,@Param("start") int start,@Param("limit") int limit);
 
     /**
      * @param attentionId

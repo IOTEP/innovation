@@ -17,7 +17,7 @@ public class RaffleUtil {
         Random rdom = new Random();
 
         for (int i=0; i<prizeList.size(); i++){
-            for(int j=0; j<prizeList.get(i).getPrizeNumber(); i++) {
+            for(int j=0; j<prizeList.get(i).getPrizeNumber(); j++) {
                 int index = rdom.nextInt(list.size());
                 RaffleEntity raffleEntity = new RaffleEntity();
                 raffleEntity.setActivityId(prizeList.get(i).getActivityId());

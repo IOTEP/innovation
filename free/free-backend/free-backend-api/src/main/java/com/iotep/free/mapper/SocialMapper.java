@@ -10,6 +10,14 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SocialMapper {
 
     /**
+     *
+     * @param social
+     * @return
+     *
+     */
+    public SocialEntity getOneSocial(SocialEntity social);
+
+    /**
      * @param social
      * @return
      */

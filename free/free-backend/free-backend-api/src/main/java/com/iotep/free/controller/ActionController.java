@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/action")
-public class ActionController {
+public class ActionController extends CommonController {
 
     @Autowired
     private ActionService actionService;
@@ -169,6 +169,36 @@ public class ActionController {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
             int succ = actionService.socialAction(userId, attentionId, action);
+            if(succ <= 0){
+                return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
+            }
+            //ResponseData.setData(succ);
+        } catch (Exception e) {
+            ResponseData.setErrNo(ReturnCode.DB_EXCEPTION.getK());
+            ResponseData.setErrMessage(ReturnCode.DB_EXCEPTION.getV());
+
+        }
+        return ResponseData;
+    }
+
+    /**************2.6 参与抽奖行为 ***************/
+    @RequestMapping(value = "/openRaffle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseData openRaffleAction(@RequestBody Map map) {
+        ResponseData ResponseData = new ResponseData();
+
+        if (!map.containsKey("activityId") ) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
+        int activityId = Integer.parseInt(map.get("activityId").toString());
+        int userId = -1;
+        if(map.containsKey("userId")) {
+            userId = Integer.parseInt(map.get("userId").toString());
+        }
+
+        try {
+            ResponsePageData responsePageData = new ResponsePageData<>();
+
+            int succ = actionService.openRaffleAction(userId, activityId);
             if(succ <= 0){
                 return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
             }
