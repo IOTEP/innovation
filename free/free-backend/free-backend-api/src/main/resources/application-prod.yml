@@ -44,6 +44,19 @@ spring:
         filters: stat, wall
         # 通过connectProperties属性来打开mergeSql功能，慢SQL记录
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+redis:
+  database: 5
+  host: 39.98.190.70
+  port: 6379
+  password: 0c73f6b6fa
+  timeout: 1000
+  pool:
+    maxActive: 20
+    maxWait: 1000
+    maxIdle: 30
+    minIdle: 0
+
 logging:
   level:
     com.iotep.free.mapper: DEBUG

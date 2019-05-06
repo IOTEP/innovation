@@ -51,6 +51,7 @@ public class UserController extends CommonController {
         System.out.println(res);
         if(!StringUtils.isEmpty(res)){
             ResponseData.setErrMessage("已发送过验证码");
+            ResponseData.setData(res);
             return ResponseData;
         }
 
@@ -70,6 +71,9 @@ public class UserController extends CommonController {
             Long resExpire = redisUtil.expire("loginSms_"+phone, 600, RedisConstants.datebase4);//设置key过期时间
             logger.info("resExpire="+resExpire);
         }
+
+        System.out.println("succ_code:"+code);
+        ResponseData.setData(code);
         return ResponseData;
     }
 
@@ -110,7 +114,7 @@ public class UserController extends CommonController {
         UserEntity u = userService.loginUser(user);
         if(u != null) {
             String token = JwtTokenUtil.createToken(u.getId()+"",true);
-            //存code进入redis  设置超时时间10分钟
+            //存code进入redis  设置超时时间7天
             redisUtil.set("login_"+u.getId(),token, RedisConstants.datebase1);
             Long resExpire = redisUtil.expire("login_"+token, 3600*24*7, RedisConstants.datebase1);//设置key过期时间
             logger.info("resExpire="+resExpire);
