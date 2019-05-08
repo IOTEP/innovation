@@ -2,7 +2,9 @@ package com.iotep.free.config;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
+import com.iotep.free.constant.RedisConstants;
 import com.iotep.free.util.JwtTokenUtil;
+import com.iotep.free.util.RedisUtil;
 import com.iotep.free.util.StringJsonUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -24,8 +26,8 @@ import java.util.Set;
  */
 public class ParameterRequestWrapper  extends HttpServletRequestWrapper {
     private Map<String , String[]> params = new HashMap<String, String[]>();
-    /*@Autowired
-    RedisUtil redisUtil;*/
+//    @Autowired
+//    RedisUtil redisUtil;
 
     public ParameterRequestWrapper(HttpServletRequest request) {
         // 将request交给父类，以便于调用对应方法的时候，将其输出，其实父亲类的实现方式和第一种new的方式类似
@@ -69,13 +71,12 @@ public class ParameterRequestWrapper  extends HttpServletRequestWrapper {
             String userName = JwtTokenUtil.getUsername(token);
 
             if (!StringUtils.isEmpty(userName) ) {
-                //RedisUtil redisUtil = new RedisUtil();
-                //String res = redisUtil.get("login_"+userName, RedisConstants.datebase1);
+                String res = RedisUtil.get("login_"+userName, RedisConstants.datebase1);
 
-                //System.out.println(res);
-                //if(!StringUtils.isEmpty(res) && res.equals(token)){
+                System.out.println("res:"+res);
+                if(!StringUtils.isEmpty(res) && res.equals(token)){
                     map.put("myUserId", Integer.parseInt(userName));
-                //}
+                }
             }
         }
 

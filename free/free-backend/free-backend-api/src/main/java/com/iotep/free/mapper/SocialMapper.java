@@ -2,6 +2,9 @@ package com.iotep.free.mapper;
 
 import com.iotep.free.entity.SocialEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Created by yongwei7 on 2019/3/30.
@@ -34,6 +37,13 @@ public interface SocialMapper {
      * @return
      */
     public int isSocial(SocialEntity social);
+
+    /**
+     * @param userId
+     * @param attentionIdList
+     * @return
+     */
+    public List<SocialEntity> findSocialByAttentionIdList(@Param("userId") int userId, @Param("attentionIdList") String attentionIdList);
 
     /**
      * @param social

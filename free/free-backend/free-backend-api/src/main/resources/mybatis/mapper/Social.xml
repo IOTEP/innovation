@@ -15,7 +15,7 @@
     </sql>
 
     <sql id="Base_Column_List">
-        id,user_id,attentionId,status,created_time
+        id,user_id,attention_id,status,created_time
     </sql>
 
     <insert id="insertSocial" useGeneratedKeys="true" keyProperty="id" >
@@ -48,6 +48,17 @@
         FROM
         <include refid="Table_Name"/>
         WHERE user_id=#{userId} AND attention_id=#{attentionId} AND status=1
+    </select>
+
+    <select id="findSocialByAttentionIdList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE  user_id=#{userId} AND status=1
+        <if test="attentionIdList != null">
+            AND attention_id IN ( #{attentionIdList} )
+        </if>
     </select>
 
     <insert id="replaceSocial" useGeneratedKeys="true" keyProperty="id" >

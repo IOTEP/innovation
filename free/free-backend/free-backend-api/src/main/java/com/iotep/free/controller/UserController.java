@@ -138,8 +138,8 @@ public class UserController extends CommonController {
     public ResponseData getOneInfo(@RequestBody UserEntity userEntity) {
         ResponseData ResponseData = new ResponseData();
 
-        int myUserId = userEntity.getMyUserId();
-        UserEntity u = userService.findUserInfo(userEntity,myUserId);
+        int userId = userEntity.getId();
+        UserEntity u = userService.findUserInfo(userEntity,userId);
         ResponseData.setData(u);
         return ResponseData;
     }

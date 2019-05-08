@@ -27,8 +27,10 @@ public class ActionController extends CommonController {
     @RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData actionComment(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
-        System.out.println(1);
 
+        if (!map.containsKey("myUserId")) {
+            return ResponseData.build(ResponseCode.SERVICE_LOGIN_TOKEN_ERROR);
+        }
         if (!map.containsKey("commentType")  || !map.containsKey("action")) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
@@ -43,7 +45,7 @@ public class ActionController extends CommonController {
             content = map.get("content").toString();
         }
 
-        int userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = Integer.parseInt(map.get("myUserId").toString());
         int activityId = -1;
         int commentId = -1;
         int replyType = -1;
@@ -68,7 +70,7 @@ public class ActionController extends CommonController {
         try {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            int succ = actionService.commentAndReplyAction(userId, activityId, commentId, commentType, commentTypeId, replyType, replyId, action, content);
+            int succ = actionService.commentAndReplyAction(myUserId, activityId, commentId, commentType, commentTypeId, replyType, replyId, action, content);
             if(succ <= 0){
                 return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
             }
@@ -86,6 +88,9 @@ public class ActionController extends CommonController {
     public ResponseData actionLike(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
 
+        if (!map.containsKey("myUserId")) {
+            return ResponseData.build(ResponseCode.SERVICE_LOGIN_TOKEN_ERROR);
+        }
         if (!map.containsKey("action")) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
@@ -107,12 +112,12 @@ public class ActionController extends CommonController {
             likeId = Integer.parseInt(map.get("id").toString());
         }
 
-        int userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = Integer.parseInt(map.get("myUserId").toString());
 
         try {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            int succ = actionService.likeAction(userId, likeId, likeType, typeId, action);
+            int succ = actionService.likeAction(myUserId, likeId, likeType, typeId, action);
             if(succ <= 0){
                 return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
             }
@@ -130,17 +135,20 @@ public class ActionController extends CommonController {
     public ResponseData actionRaffle(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
 
+        if (!map.containsKey("myUserId")) {
+            return ResponseData.build(ResponseCode.SERVICE_LOGIN_TOKEN_ERROR);
+        }
         if (!map.containsKey("activityId") || !map.containsKey("userId") || !map.containsKey("attentionId")) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
-        int userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = Integer.parseInt(map.get("myUserId").toString());
         int attentionId = Integer.parseInt(map.get("attentionId").toString());
 
         try {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            int succ = actionService.joinRaffleAction(userId, activityId, attentionId);
+            int succ = actionService.joinRaffleAction(myUserId, activityId, attentionId);
             if(succ <= 0){
                 return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
             }
@@ -158,17 +166,20 @@ public class ActionController extends CommonController {
     public ResponseData actionAttention(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
 
+        if (!map.containsKey("myUserId")) {
+            return ResponseData.build(ResponseCode.SERVICE_LOGIN_TOKEN_ERROR);
+        }
         if (!map.containsKey("action") || !map.containsKey("userId") || !map.containsKey("attentionId")) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int action = Integer.parseInt(map.get("action").toString());
-        int userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = Integer.parseInt(map.get("myUserId").toString());
         int attentionId = Integer.parseInt(map.get("attentionId").toString());
 
         try {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            int succ = actionService.socialAction(userId, attentionId, action);
+            int succ = actionService.socialAction(myUserId, attentionId, action);
             if(succ <= 0){
                 return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
             }
@@ -181,24 +192,25 @@ public class ActionController extends CommonController {
         return ResponseData;
     }
 
-    /**************2.6 参与抽奖行为 ***************/
+    /************** 开奖行为 ***************/
     @RequestMapping(value = "/openRaffle", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData openRaffleAction(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
 
+        if (!map.containsKey("myUserId")) {
+            return ResponseData.build(ResponseCode.SERVICE_LOGIN_TOKEN_ERROR);
+        }
         if (!map.containsKey("activityId") ) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
-        int userId = -1;
-        if(map.containsKey("userId")) {
-            userId = Integer.parseInt(map.get("userId").toString());
-        }
+        int myUserId = Integer.parseInt(map.get("myUserId").toString());
+
 
         try {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            int succ = actionService.openRaffleAction(userId, activityId);
+            int succ = actionService.openRaffleAction(myUserId, activityId);
             if(succ <= 0){
                 return ResponseData.build(ResponseCode.SERVICE_RESULT_ERROR);
             }

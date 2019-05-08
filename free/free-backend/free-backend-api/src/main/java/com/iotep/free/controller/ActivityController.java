@@ -34,12 +34,12 @@ public class ActivityController extends CommonController {
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData getActivityList(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
-        int userId = 0;
-        if (!map.containsKey("userId")){
-            userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = 0;
+        if (map.containsKey("myUserId")){
+            myUserId = Integer.parseInt(map.get("myUserId").toString());
         }
         System.out.println("list");
-        logger.info("userId:" + userId);
+        logger.info("userId:" + myUserId);
 
 
         try {
@@ -58,7 +58,7 @@ public class ActivityController extends CommonController {
             Pagination pagination = ParamUtil.filterPagination(page, size);
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            List<ActivityListEntity> dataList = activityService.findActivityList(userId, sort, pagination.getStart(), pagination.getLimit());
+            List<ActivityListEntity> dataList = activityService.findActivityList(myUserId, sort, pagination.getStart(), pagination.getLimit());
 
             responsePageData.setDataList(dataList);
             responsePageData.setPage(pagination.getPage());
@@ -82,13 +82,13 @@ public class ActivityController extends CommonController {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
-        int userId = -1;
-        if (map.containsKey("userId")){
-            userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = -1;
+        if (map.containsKey("myUserId")){
+            myUserId = Integer.parseInt(map.get("myUserId").toString());
         }
 
         try {
-            ActivityInfoEntity data = activityService.findActivityInfo(userId,activityId);
+            ActivityInfoEntity data = activityService.findActivityInfo(myUserId,activityId);
             ResponseData.setData(data);
         } catch (Exception e) {
             ResponseData.setErrNo(ReturnCode.DB_EXCEPTION.getK());
@@ -147,9 +147,9 @@ public class ActivityController extends CommonController {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int activityId = Integer.parseInt(map.get("activityId").toString());
-        int userId = 0;
-        if (map.containsKey("userId")){
-            userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = -1;
+        if (map.containsKey("myUserId")){
+            myUserId = Integer.parseInt(map.get("myUserId").toString());
         }
 
         try {
@@ -168,7 +168,7 @@ public class ActivityController extends CommonController {
             Pagination pagination = ParamUtil.filterPagination(page, size);
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            List<CommentEntity> dataList = activityService.findActivityCommentList(userId,activityId, sort, pagination.getStart(), pagination.getLimit());
+            List<CommentEntity> dataList = activityService.findActivityCommentList(myUserId,activityId, sort, pagination.getStart(), pagination.getLimit());
 
             responsePageData.setDataList(dataList);
             responsePageData.setPage(pagination.getPage());
@@ -193,9 +193,9 @@ public class ActivityController extends CommonController {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int commentId = Integer.parseInt(map.get("commentId").toString());
-        int userId = 0;
-        if (map.containsKey("userId")){
-            userId = Integer.parseInt(map.get("userId").toString());
+        int myUserId = 0;
+        if (map.containsKey("myUserId")){
+            myUserId = Integer.parseInt(map.get("myUserId").toString());
         }
 
         try {
@@ -214,7 +214,7 @@ public class ActivityController extends CommonController {
             Pagination pagination = ParamUtil.filterPagination(page, size);
             ResponsePageData responsePageData = new ResponsePageData<>();
 
-            List<ReplyEntity> dataList = activityService.findActivityCommentReplyList(userId,commentId, sort, pagination.getStart(), pagination.getLimit());
+            List<ReplyEntity> dataList = activityService.findActivityCommentReplyList(myUserId,commentId, sort, pagination.getStart(), pagination.getLimit());
 
             responsePageData.setDataList(dataList);
             responsePageData.setPage(pagination.getPage());

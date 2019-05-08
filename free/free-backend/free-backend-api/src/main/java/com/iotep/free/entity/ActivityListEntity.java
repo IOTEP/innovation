@@ -24,6 +24,7 @@ public class ActivityListEntity {
     private Integer status;
     private Integer isEnd;
     private Integer isJoin;
+    private Integer isAttention;
     private Integer upperLimit;
     private Integer joinLimit;
     private Integer activityMode;

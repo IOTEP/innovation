@@ -12,7 +12,8 @@ public enum ResponseCode {
     PRAME_ERROR(1004, "参数错误"),
     SERVICE_RESULT_ERROR(1005, "请求service错误"),
     SERVICE_SMS_ERROR(1006, "请求sms错误"),
-    SERVICE_LOGIN_CODE_ERROR(1007, "登陆错误");
+    SERVICE_LOGIN_CODE_ERROR(1007, "登陆错误"),
+    SERVICE_LOGIN_TOKEN_ERROR(1008, "未登录或者登陆token失效，请重新登陆");
 
     private Integer code;
     private String msg;

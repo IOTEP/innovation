@@ -1,6 +1,7 @@
 package com.iotep.free.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -17,6 +18,7 @@ import java.io.PrintWriter;
 @Component
 @WebFilter(filterName = "ParamsFilter" , urlPatterns = "/*")
 public class ParamsFilter implements Filter{
+
     @Override
     public void doFilter(ServletRequest arg0, ServletResponse arg1,
                          FilterChain arg2) throws IOException, ServletException {

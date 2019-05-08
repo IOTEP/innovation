@@ -35,25 +35,44 @@ public class ActivityService {
 
         if(activityListEntity.size() > 0 && userId > 0) {
             String activityIdListStr = "";
+            String attentionIdListStr = "";
             HashSet<Integer> activityIdList = new HashSet<>();
             HashSet<Integer> joinActivityIdList = new HashSet<>();
+            HashSet<Integer> attentionIdList = new HashSet<>();
+            HashSet<Integer> joinAttentionIdList = new HashSet<>();
 
             for (int i = 0; i < activityListEntity.size(); i++) {
                 activityIdList.add(activityListEntity.get(i).getId());
+                attentionIdList.add(activityListEntity.get(i).getUserId());
             }
             activityIdListStr = StringUtil.hashsetIntToString(activityIdList);
+            attentionIdListStr = StringUtil.hashsetIntToString(attentionIdList);
             //是否参加活动
             List<UserActivityEntity> userActivityEntity = userActivityMapper.findUserActivityListByCond(userId,activityIdListStr);
             for(int i =0; i< userActivityEntity.size(); i++){
                 joinActivityIdList.add(userActivityEntity.get(i).getActivityId());
             }
+            System.out.println("test11");
+            //是否关注广告主
+            List<SocialEntity> socailEntity = socialMapper.findSocialByAttentionIdList(userId,attentionIdListStr);
+            for(int i =0; i< socailEntity.size(); i++){
+                joinAttentionIdList.add(socailEntity.get(i).getAttentionId());
+            }
+            System.out.println("test1");
+
             for(int i =0; i< activityListEntity.size(); i++){
                 if(joinActivityIdList.contains(activityListEntity.get(i).getId())){
                     activityListEntity.get(i).setIsJoin(1);
                 }else{
                     activityListEntity.get(i).setIsJoin(0);
                 }
+                if(joinAttentionIdList.contains(activityListEntity.get(i).getUserId())){
+                    activityListEntity.get(i).setIsAttention(1);
+                }else{
+                    activityListEntity.get(i).setIsAttention(0);
+                }
             }
+            System.out.println("test2");
         }
 
         return activityListEntity;

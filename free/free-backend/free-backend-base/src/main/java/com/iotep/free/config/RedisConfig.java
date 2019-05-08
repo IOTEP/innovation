@@ -11,7 +11,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * Created by yongwei7 on 2019/4/30.
  */
 @Configuration
-
+//@ConfigurationProperties(prefix = "redis")
 public class RedisConfig extends CachingConfigurerSupport {
     @Value("${redis.host}")
     private String host;
@@ -40,7 +40,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Value("${redis.pool.maxWait}")
     private Integer maxWait;
 
-    @Bean(name = "tagRedisPool")
+    @Bean(name = "pool")
     public JedisPool jedisPool() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         // 最大空闲数
