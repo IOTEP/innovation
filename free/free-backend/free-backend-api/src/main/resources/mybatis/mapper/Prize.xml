@@ -27,7 +27,7 @@
         <include refid="Base_Column_List"/>
         FROM
         <include refid="Table_Name"/>
-        WHERE id=#{activityId}
+        WHERE activity_id=#{activityId}
     </select>
 
 

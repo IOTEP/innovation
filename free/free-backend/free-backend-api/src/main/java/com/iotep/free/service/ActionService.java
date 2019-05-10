@@ -221,7 +221,7 @@ public class ActionService {
 
     /**** 抽奖行为 ***/
     public int openRaffleAction(int userId, int activityId) {
-        int succ = 1;
+        int succ = 0;
 
         //活动奖品
         List<PrizeEntity> prizeList = new ArrayList<>();
@@ -238,10 +238,12 @@ public class ActionService {
                     userList.add(activityUserList.get(i).getId());
                 }
             }
+            System.out.println(userList.size());
 
             //随机抽奖
             List<RaffleEntity> raffleList = new ArrayList<>();
             raffleList = RaffleUtil.draw(prizeList,userList);
+            System.out.println("test2");
 
             //批量写入中奖名单
             succ = raffleMapper.insertRaffleBatch(raffleList);
@@ -251,6 +253,8 @@ public class ActionService {
                 activityMapper.updateIsEnd(activityId);
             }
 
+        }else{
+            logger.info("activityId:"+activityId+" has no record in t_prize");
         }
 
         return succ;
