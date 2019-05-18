@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import Menu from '../../components/menu/menu';
 import TopicList from '../../components/topiclist/topiclist'
 import './index.less'

@@ -1,15 +1,25 @@
-// 
-// const rootPath='http://cnodejs.org/api/v1';
+/*
+ * @Author: TravelerZw 
+ * @Date: 2019-04-28 13:44:39 
+ * @Last Modified by: TravelerZw
+ * @Last Modified time: 2019-05-08 22:51:44
+ */
 
-const rootPath='https://free.sanyicun.com/free';
+// const rootPath='https://free.sanyicun.com/free';
+
+const rootPath='http://39.98.190.70:2023/free';
+
 const apiObject={
-  gettopics:rootPath+'/activity/list',//获取首页列表
-  gettopicinfo:rootPath+'/topic/',//获取话题详情
-  checkusertoken:rootPath+'/accesstoken',//验证用户token
-  getuserinfo:rootPath+'/user/',//获取用户信息
-  createtopic:rootPath+'/topics',//新建话题
-  replytopic:rootPath+'/topic/',//回复话题消息
-  upreply:rootPath+'/reply/',//点赞
-  updatetopic:rootPath+'/topics/update'  //更新主题
+  //获取首页列表
+  gettopics:rootPath+'/activity/list',
+  // 获取活动详情接口
+  getactdetails:rootPath+'/activity/info',
+  // 获取短信验证码
+  getCode:rootPath+'/user/loginSendSms',
+  // 登录
+  login:rootPath+'/user/login',
+  // 活动人员列表
+  userList:rootPath+'/activity/userList'
+
 }
 export default apiObject;

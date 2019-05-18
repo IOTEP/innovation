@@ -1,0 +1,74 @@
+.comment-list{
+  padding: 0 10PX;
+  box-sizing: border-box;
+  .comment-box{
+    margin-top: 20PX;
+    .title{
+      display: flex;
+      box-sizing: border-box;
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+      .user-box{
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: row;
+        .avatar{
+          width: 40PX;
+          height: 40PX;
+          border-radius: 30PX;
+          background: #999999;
+          align-items: center;
+        }
+        .nick-box{
+          margin-left: 8PX;
+          .nick{
+            color: #333333;
+            font-size: 14PX;
+            font-weight: bold;
+          }
+          .time{
+            font-size: 12PX;
+            color: #666666;
+          }
+        }
+      }
+      .details{
+        color: #999999;
+        display: flex;
+        flex-direction: row;
+        .right{
+          margin-left: 10PX;
+        }
+        .space{
+          margin-left: 4PX;
+        }
+      }
+    }
+    .content{
+      padding: 0 0 0 50PX;
+      // box-sizing: border-box;
+      // overflow: hidden;
+      line-height: 1.4;
+      font-size: 12PX;
+      color: #666666;
+      white-space: normal;
+      .det{
+        word-wrap:break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap:break-word;
+        -webkit-line-clamp: 3;
+        /*! autoprefixer: off */
+        -webkit-box-orient: vertical; 
+      }
+      .reply{
+        background: #f0f0f0;
+        font-size: 14px;
+        margin-top: 6PX;
+        padding: 6PX 10PX;
+        box-sizing: border-box;
+      }
+    }
+  }
+}

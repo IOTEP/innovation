@@ -2,23 +2,27 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-03 22:07:30 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-04-25 16:11:33
+ * @Last Modified time: 2019-05-08 17:32:06
  */
 
 import {getJSON,postJSON} from '../utils/request';
 import api from  '../constants/api';
 import  Taro from '@tarojs/taro';
-//请求首页数据
+
+//请求首页抽奖数据
 export  function  getTopicList(params){
-    return  async dispatch=>{
-      let  result= await postJSON(api.gettopics,params);
+    return async dispatch=>{
+      let  result= await postJSON(api.gettopics,params).catch(_ERROR => {
+        console.log(_ERROR);
+      })
       if(result&&result.data){
-          if(result.data.success){
-              dispatch({type:'getTopicList',list:result.data.data})
-          }
+        if(result.data.errNo === 0){
+            dispatch({type:'getTopicList',list:result.data.data.dataList})
+        }
       }
     }
 }
+
 //请求下页数据
 export function  getNextList(params){
     return  async dispatch=>{
@@ -32,15 +36,18 @@ export function  getNextList(params){
         }
       }
 }
-//请求详情
+// 活动请求详情
 export  function  getTopicInfo(params){
     return async  dispatch=>{
-     let result= await getJSON(api.gettopicinfo+params.id,params)
-       if(result&&result.data&&result.data.success){
-            dispatch({type:'getTopicInfo',infoData:result.data.data}) 
-       }else{
-           console.error('请求详情失败！')
-       }
+     let result= await postJSON(api.getactdetails, params)
+      if(result && result.data){
+          dispatch({
+              type:'getTopicInfo',
+              infoData:result.data.data
+          }) 
+      } else {
+          console.error('请求详情失败！')
+      }
     }
 }
 //点赞话题回复

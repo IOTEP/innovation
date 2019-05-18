@@ -1,28 +1,28 @@
 import  Taro,{Component} from '@tarojs/taro';
 import  {ScrollView,View,Text,Button} from  '@tarojs/components';
 import {connect} from '@tarojs/redux';
-import {getTopicList,getNextList} from '../../actions/topiclist';
-import  Topic from  './topic';
-import HomeHead from '../homehead/homehead'
+import {getUserList} from '../../actions/userlist';
+import  User from  './user';
 import {loadUserToken} from '../../utils/catch'
 
+
 @connect(function(store){
-   return {...store.topiclist}
+   console.log("9999")
+   console.log(store)
+   return {...store.userlist}
 },function(dispatch){
-   return {getTopicList(params){
-      dispatch(getTopicList(params))
-   },
-   getNextList(params){
-      dispatch(getNextList(params))
+   return {getUserList(params){
+      dispatch(getUserList(params))
    }
  }
 })
-class  TopicList  extends   Component{
+class UserList extends Component{
    componentWillMount(){
+      // pull price list
       let {page,size}=this.props;
       let userId = 1;
       let token= loadUserToken();
-      this.props.getTopicList && this.props.getTopicList({page,size,userId,token});
+      this.props.getUserList && this.props.getUserList({page,size,userId,token});
    }
    componentWillReceiveProps(nextProps) {
       console.log(nextProps);
@@ -37,12 +37,10 @@ class  TopicList  extends   Component{
    render(){
       let {list}=this.props;
       return (<ScrollView style={{height:'100vh', paddingBottom: '65PX',paddingLeft: '10PX', paddingRight: '10PX',boxSizing: 'border-box'}}  onScrollToLower={this.onScrollToLower.bind(this)} scrollX={false} scrollY={true} >
-         <HomeHead>
-         </HomeHead>
          {
-            list.map((item )=><Topic item={item} />)
+            list.map((item )=><User item={item} />)
          }
       </ScrollView>)
    }
 }
-export default  TopicList;
+export default UserList;

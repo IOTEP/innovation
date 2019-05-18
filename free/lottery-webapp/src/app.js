@@ -16,7 +16,7 @@ import './app.less'
 // }
 
 const store = configStore()
-
+import './assets/less/icon.css';
 class App extends Component {
 
   config = {
@@ -27,7 +27,8 @@ class App extends Component {
       'pages/my/index',
       'pages/set/index',
       'pages/address/index',
-      'pages/addaddress/index'
+      'pages/addaddress/index',
+      'pages/login/index'
     ],
     window: {
       backgroundTextStyle: 'light',

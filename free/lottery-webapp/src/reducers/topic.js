@@ -7,6 +7,7 @@ const TOPIC_STATE={
     list:[],
     topicinfo:{},
     replies:[],
+    joinUids: [],
     //点赞状态
     admireState:false
 }
@@ -14,9 +15,20 @@ const TOPIC_STATE={
 export default function topiclist(prestate=TOPIC_STATE,action){
     switch(action.type){
         case  'admireSuccess':
-        return {...prestate,admireState:!prestate.admireState}
+        return {
+            ...prestate,admireState:!prestate.admireState
+        }
         case 'getTopicInfo':
-        return {...prestate,replies:action.infoData.replies,topicinfo:{...action.infoData,replies:null}}
+        return {
+            ...prestate,
+            replies:action.infoData.raffleUserList,
+            joinUids:action.infoData.joinUserList,
+            topicinfo:{
+                ...action.infoData,
+                raffleUserList: null,
+                joinUserList: null
+            }
+        }
         case 'getTopicList':
         return {...prestate,list:action.list,page:1}
         case  'appendTopicList':

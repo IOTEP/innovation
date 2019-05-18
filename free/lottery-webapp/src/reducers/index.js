@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
-import  menu  from './menus';
-import  topiclist  from './topic';
-
+import  topiclist  from './topic'
+import  comment  from './comment'
+import  user  from './user'
+import userlist from './userlist'
 export default combineReducers({
-  menu, topiclist
+  topiclist, comment, user, userlist
 })

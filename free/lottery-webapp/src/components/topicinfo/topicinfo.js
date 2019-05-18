@@ -2,14 +2,14 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-02 23:51:53 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-04-07 20:55:41
+ * @Last Modified time: 2019-05-08 22:45:50
  */
 
 import  Taro,{Component} from '@tarojs/taro';
 import  {View,Text,Button} from  '@tarojs/components';
-import {connect} from '@tarojs/redux';
 import  './topicinfo.less'
 import { Swiper, SwiperItem } from '@tarojs/components'
+import {myTimeToLocal} from  '../../utils/date'
 
 
 class  Topicinfo  extends   Component{
@@ -18,7 +18,6 @@ class  Topicinfo  extends   Component{
       return (<View className="shops-info">
         <View className='img-box'>
           <Swiper
-          className='test-h'
           indicatorColor='#999999'
           autoplay={false}
           indicatorActiveColor='#F10215'
@@ -28,13 +27,13 @@ class  Topicinfo  extends   Component{
           indicatorDots
           >
             <SwiperItem>
-              <View className='demo-text-1' style={{height: '100%'}}>抽奖图1</View>
+              <View className='demo-text-1'>抽奖图1</View>
             </SwiperItem>
             <SwiperItem>
-              <View className='demo-text-2' style={{height: '100%'}}>抽奖图2</View>
+              <View className='demo-text-2'>抽奖图2</View>
             </SwiperItem>
             <SwiperItem>
-              <View className='demo-text-3' style={{height: '100%'}}>抽奖图3</View>
+              <View className='demo-text-3'>抽奖图3</View>
             </SwiperItem>
           </Swiper>
         </View>
@@ -43,13 +42,13 @@ class  Topicinfo  extends   Component{
             <Text className='shops-intor-title'>
               奖品：
             </Text>
-            商品简介商品简介商品简介商品简介商品简介商品简介
-            商品简介商品简介商品简介商品简介商品简介商品简介
-            商品简介商品简介商品简介商品简介商品简介商品简介
+            {topicinfo.remark ? topicinfo.remark : ''}
           </View>
           <View  className='topic-info'>
-            <Text>2019-03-12</Text>
-            <Text style={{marginLeft: '0.5rem',}}>自动开奖</Text>
+            <Text>{myTimeToLocal(topicinfo.endTime)}</Text>
+            <Text style={{marginLeft: '0.5rem',}}>
+            {topicinfo.raffleMode ? topicinfo.raffleMode : ''}
+            </Text>
           </View>
         </View>
       </View>)
