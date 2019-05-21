@@ -8,14 +8,14 @@ import requests
 import logger
 
 
-x = logger.Logger("debug")
+mylog = logger.Logger("debug")
 
 DB_HOST = '47.105.105.90'
 DB_USER = 'root'
 DB_PASSWD = '0c73f6b6fa'
 DB_NAME = 'lottery'
 
-TIME_SPACE = 6*60*200
+TIME_SPACE = 10*60
 
 headers = {'accept': 'application/json',
            'Content-Type': 'application/json'}
@@ -50,41 +50,39 @@ class Runner:
         self.cur.execute(sql)
         rst = self.cur.fetchall()
         now = datetime.datetime.now()
-        print(now)
-        print(rst)
         lis = []
         raffle_mode2_id_list = []
         raffle_mode2_limit_list = {}
-        x.info("test")
         for item in rst:
             id = item[0]
             raffle_mode = item[1]
             upper_limit = item[2]
             end_time = item[5]
-            print(end_time)
-            print((end_time-now).seconds)
+            print(end_time.timestamp())
+            print((end_time.timestamp()-now.timestamp()))
             if raffle_mode == 1:
-                time_gap = (end_time-now).seconds
+                time_gap = now.timestamp()-end_time.timestamp()
+                print(time_gap)
+
                 if(time_gap >0 and time_gap <= TIME_SPACE):
-                    print(1)
                     #调用开奖接口
                     requests_body = {
                         'activityId': id,
                         'myUserId':1
                     }
                     self.requestopenraffle(requests_body)
+                elif(time_gap >0 and time_gap > TIME_SPACE):
+                    mylog.error('activityId:'+str(id)+' 超过开奖时间间隔')
 
             elif (raffle_mode == 2 and upper_limit >0):
                 raffle_mode2_id_list.append(id)
                 raffle_mode2_limit_list[id] = upper_limit
-                print(1)
             else:
-                x.info("id:"+id+"raffle_mode:"+raffle_mode)
-                print(raffle_mode)
+                mylog.info("id:"+str(id)+"  raffle_mode:"+raffle_mode+" skip")
 
         if(len(raffle_mode2_id_list)>0):
-            str = ','.join(raffle_mode2_id_list)
-            sql = """ select activity_id,count(*) as number from t_user_activity WHERE activityId IN('%s') group by activityId """ %(str)
+            id_str = ','.join(raffle_mode2_id_list)
+            sql = """ select activity_id,count(*) as number from t_user_activity WHERE activityId IN('%s') group by activityId """ %(id_str)
             self.cur.execute(sql)
             rst = self.cur.fetchall()
             for item in rst:
