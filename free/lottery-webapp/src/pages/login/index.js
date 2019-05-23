@@ -32,7 +32,8 @@ class Login extends   Component{
          disabled: false,
          second: 60,
          isOpened: false,
-         text: "123"
+         text: "123",
+         msg: ""
       }
     }
    componentWillMount(){
@@ -42,12 +43,24 @@ class Login extends   Component{
    }
    componentWillReceiveProps(nextProps){
    }
-   handleChange() {
-
+   handleInput (stateName, value) {
+      if (!value && value === '') {
+         if (value === 'value15') {
+            this.setState({
+               isOpened: true,
+               msg: "请输入手机号！"
+            })   
+         }
+      } else {
+         this.setState({
+            isOpened: false
+         })   
+      }
+      this.setState({
+        [stateName]: value
+      })
    }
-   handleInput() {
 
-   }
    handleCode(){
       let params={
         phone: '18810910091'
@@ -85,19 +98,21 @@ class Login extends   Component{
    loginSub() {
       if (this.state.value15 === "" || !this.state.value15) {
          this.setState({
-            isOpened: true
-         })
+            isOpened: true,
+            msg: "请输入手机号！"
+         })   
+      } else {
+         let {code} = this.props
+         let params={
+            appUserId: '18810910091',
+            appType: 0,
+            code: code
+         }
+         this.props.loginRequest && this.props.loginRequest(params)
+         // Taro.navigateTo({
+         //    url: '/pages/index/index',
+         // })
       }
-      let {code} = this.props
-      let params={
-         appUserId: '18810910091',
-         appType: 0,
-         code: code
-      }
-      this.props.loginRequest && this.props.loginRequest(params)
-      Taro.navigateTo({
-         url: '/pages/index/index',
-      })
    }
    // 微博登录
    loginSubWeibo() {
@@ -147,7 +162,7 @@ class Login extends   Component{
                </View>
             </View>   
          </AtForm>
-         <AtToast isOpened={this.state.isOpened} text={this.state.text} icon="{icon}"></AtToast>
+         <AtToast isOpened={this.state.isOpened} duration={500} text={this.state.msg}></AtToast>
       </View>)
    }
 }

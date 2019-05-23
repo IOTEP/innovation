@@ -4,11 +4,7 @@ import {connect} from '@tarojs/redux';
 import {getUserList} from '../../actions/userlist';
 import  User from  './user';
 import {loadUserToken} from '../../utils/catch'
-
-
 @connect(function(store){
-   console.log("9999")
-   console.log(store)
    return {...store.userlist}
 },function(dispatch){
    return {getUserList(params){
@@ -22,7 +18,14 @@ class UserList extends Component{
       let {page,size}=this.props;
       let userId = 1;
       let token= loadUserToken();
-      this.props.getUserList && this.props.getUserList({page,size,userId,token});
+      let params={
+         activityId: parseInt(this.$router.params.activeid),
+         userId,
+         token,
+         page,
+         size
+      }
+      this.props.getUserList && this.props.getUserList(params);
    }
    componentWillReceiveProps(nextProps) {
       console.log(nextProps);
@@ -36,7 +39,9 @@ class UserList extends Component{
    }
    render(){
       let {list}=this.props;
-      return (<ScrollView style={{height:'100vh', paddingBottom: '65PX',paddingLeft: '10PX', paddingRight: '10PX',boxSizing: 'border-box'}}  onScrollToLower={this.onScrollToLower.bind(this)} scrollX={false} scrollY={true} >
+      console.log("用户列表");
+      console.log(list);
+      return (<ScrollView style={{height:'100vh', paddingTop: '46PX', paddingBottom: '65PX',paddingLeft: '10PX', paddingRight: '10PX',boxSizing: 'border-box'}}  onScrollToLower={this.onScrollToLower.bind(this)} scrollX={false} scrollY={true} >
          {
             list.map((item )=><User item={item} />)
          }

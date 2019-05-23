@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-07 22:10:21 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-05-12 12:06:21
+ * @Last Modified time: 2019-05-23 14:24:25
  */
 import  Taro,{Component} from '@tarojs/taro';
 import  {View} from  '@tarojs/components';
@@ -23,7 +23,6 @@ class Participant extends Component{
    handleClick() {
       Taro.navigateBack({ delta: 1 })
    }
-   
    render(){
       return (<View className='participant'>
          <AtNavBar

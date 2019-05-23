@@ -9,10 +9,10 @@ import Lottery from '../../components/topicinfo/lottery'
 import Comment from '../../components/comment/comment'
 
 import { AtTabs, AtDivider, AtTabsPane, AtNavBar, AtCountdown,AtFloatLayout,AtTextarea,AtButton } from 'taro-ui'
-
 import './index.less'
-
 @connect(function(store) {
+  console.log("**********呵呵呵**************")
+  console.log(store)
   return {
     topicinfo: store.topiclist.topicinfo,
     commentshow: store.comment.commentBox
@@ -111,7 +111,7 @@ class Detail extends   Component{
                     onTimeUp={this.onTimeUp.bind(this)}
                   />
                 </View>
-                <Lottery>
+                <Lottery activeid={this.$router.params.activeid}>
                 </Lottery>
                 <AtDivider content='精彩评论' />
                 <CommentList>

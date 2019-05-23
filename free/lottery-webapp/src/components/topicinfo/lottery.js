@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-07 21:07:57 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-04-07 22:11:43
+ * @Last Modified time: 2019-05-23 14:33:14
  */
 
 import  Taro,{Component} from '@tarojs/taro';
@@ -14,9 +14,10 @@ import './lottery.less';
 
 class  Lottery  extends   Component{
   goToAllComment() {
-    Taro.navigateTo({url:'/pages/allparticipant/index'});
+    let {activeid} = this.props;
+    Taro.navigateTo({url:'/pages/allparticipant/index?activeid=' + activeid});
   }
-   render(){
+  render(){
       return (<View className='lottery'>
         <View className='lot-box'>
           <AtButton className='btn' type='primary'>参与抽奖</AtButton>
