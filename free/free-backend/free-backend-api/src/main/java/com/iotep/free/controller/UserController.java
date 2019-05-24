@@ -80,29 +80,51 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData login(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
-        if ( !map.containsKey("appType") || !map.containsKey("appUserId") || !map.containsKey("code")  ) {
+        if ( !map.containsKey("appType") || !map.containsKey("appUserId") ) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
 
+        System.out.println("login");
+        int appType = Integer.parseInt(map.get("appType").toString());
         String appUserId = map.get("appUserId").toString();
-        String code = map.get("code").toString();
-
-        String res = redisUtil.get("loginSms_"+appUserId, RedisConstants.datebase4);
-        System.out.println(res);
-        if(StringUtils.isEmpty(res) || !res.equals(code)){
-            logger.info("登陆信息不匹配="+appUserId+"_"+code);
-            return ResponseData.build(ResponseCode.SERVICE_LOGIN_CODE_ERROR);
-        }
-
+        String code = "";
         UserEntity user = new UserEntity();
-        //user.setAccessToken(map.get("accessToken").toString());
-        //第一期只支持手机号登陆 校验登陆
-        user.setAppType(0);
+        user.setAppType(appType);
         user.setType(1);
         user.setAppUserId(appUserId);
         user.setId(0);
 
-        //校验accessToken
+        //第一期支持手机号和微博登陆 校验登陆
+        switch (appType){
+            case 0:
+                if(!map.containsKey("code")){
+                    return ResponseData.build(ResponseCode.PRAME_ERROR);
+                }
+                code = map.get("code").toString();
+                String res = redisUtil.get("loginSms_"+appUserId, RedisConstants.datebase4);
+                System.out.println(res);
+                if(StringUtils.isEmpty(res) || !res.equals(code)){
+                    logger.info("登陆信息不匹配="+appUserId+"_"+code);
+                    return ResponseData.build(ResponseCode.SERVICE_LOGIN_CODE_ERROR);
+                }
+
+                break;
+            case 1:
+            case 2:
+            case 3:
+                //校验accessToken
+                if(!map.containsKey("accessToken")){
+                    return ResponseData.build(ResponseCode.PRAME_ERROR);
+                }
+                //是否需要增加对三方登陆accessToken校验?调用第三方接口
+
+                user.setAccessToken(map.get("accessToken").toString());
+                break;
+            default:
+                return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
+
+        //user.setAccessToken(map.get("accessToken").toString());
 
         if (map.containsKey("nick")){
             user.setNick(map.get("nick").toString());
@@ -116,10 +138,12 @@ public class UserController extends CommonController {
             String token = JwtTokenUtil.createToken(u.getId()+"",true);
             //存code进入redis  设置超时时间7天
             redisUtil.set("login_"+u.getId(),token, RedisConstants.datebase1);
+            redisUtil.set("login_"+token,u.getId()+"", RedisConstants.datebase1);
+            Long resIdExpire = redisUtil.expire("login_"+u.getId(), 3600*24*7, RedisConstants.datebase1);//设置key过期时间
             Long resExpire = redisUtil.expire("login_"+token, 3600*24*7, RedisConstants.datebase1);//设置key过期时间
-            logger.info("resExpire="+resExpire);
+            logger.info("token="+token);
             u.setAccessToken(token);
-            redisUtil.del("loginSms_" + appUserId);
+            redisUtil.del(RedisConstants.datebase4,"loginSms_" + appUserId);
         }
 
         ResponseData.setData(u);
@@ -163,9 +187,12 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/attention/list", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData getAttentionList(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
+        if (!map.containsKey("userId") ) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
 
         int userId = Integer.parseInt(map.get("userId").toString());
-        int myUserId = Integer.parseInt(map.get("myUserId").toString());
+        //int myUserId = Integer.parseInt(map.get("myUserId").toString());
 
         try {
             int sort = -1;
@@ -184,7 +211,7 @@ public class UserController extends CommonController {
             ResponsePageData responsePageData = new ResponsePageData<>();
 
             System.out.println(userId);
-            System.out.println(myUserId);
+            //System.out.println(myUserId);
             List<UserEntity> dataList = userService.userAttentionList(userId, sort, pagination.getStart(), pagination.getLimit());
 
             responsePageData.setDataList(dataList);
@@ -205,6 +232,9 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/fans/list", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData getFansList(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
+        if (!map.containsKey("userId") ) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
 
         int userId = Integer.parseInt(map.get("userId").toString());
         try {
@@ -243,6 +273,9 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/activity/list", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseData getUserActivityList(@RequestBody Map map) {
         ResponseData ResponseData = new ResponseData();
+        if (!map.containsKey("userId") ) {
+            return ResponseData.build(ResponseCode.PRAME_ERROR);
+        }
 
         int userId = Integer.parseInt(map.get("userId").toString());
         try {

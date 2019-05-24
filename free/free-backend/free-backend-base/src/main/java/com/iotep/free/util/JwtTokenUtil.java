@@ -43,7 +43,7 @@ public class JwtTokenUtil {
         return getTokenBody(token).getExpiration().before(new Date());
     }
 
-    private static Claims getTokenBody(String token){
+    public static Claims getTokenBody(String token){
         return Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)

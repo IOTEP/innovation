@@ -66,16 +66,24 @@ public class ParameterRequestWrapper  extends HttpServletRequestWrapper {
         System.out.println(url);
 
         //token转成myUserID
-        if(map.containsKey("token") && !JwtTokenUtil.isExpiration((String) map.get("token"))) {
-            String token = (String) map.get("token");
-            String userName = JwtTokenUtil.getUsername(token);
+        if(map.containsKey("token") && !StringUtils.isEmpty((String) map.get("token")) ) {
+            String resToken = RedisUtil.get("login_"+(String) map.get("token"), RedisConstants.datebase1);
 
-            if (!StringUtils.isEmpty(userName) ) {
-                String res = RedisUtil.get("login_"+userName, RedisConstants.datebase1);
+            System.out.println("resToken:"+resToken);
+            if(!StringUtils.isEmpty(resToken) && !JwtTokenUtil.isExpiration((String) map.get("token"))) {
+                System.out.println("test2");
+                String token = (String) map.get("token");
+                System.out.println("test4");
+                String userName = JwtTokenUtil.getUsername(token);
+                System.out.println("test3");
 
-                System.out.println("res:"+res);
-                if(!StringUtils.isEmpty(res) && res.equals(token)){
-                    map.put("myUserId", Integer.parseInt(userName));
+                if (!StringUtils.isEmpty(userName)) {
+                    String res = RedisUtil.get("login_" + userName, RedisConstants.datebase1);
+
+                    System.out.println("res:" + res);
+                    if (!StringUtils.isEmpty(res) && res.equals(token)) {
+                        map.put("myUserId", Integer.parseInt(userName));
+                    }
                 }
             }
         }
