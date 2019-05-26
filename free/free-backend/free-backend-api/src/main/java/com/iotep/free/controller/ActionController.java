@@ -169,7 +169,8 @@ public class ActionController extends CommonController {
         if (!map.containsKey("myUserId")) {
             return ResponseData.build(ResponseCode.SERVICE_LOGIN_TOKEN_ERROR);
         }
-        if (!map.containsKey("action") || !map.containsKey("userId") || !map.containsKey("attentionId")) {
+        if (!map.containsKey("action")
+                || !map.containsKey("attentionId")) {
             return ResponseData.build(ResponseCode.PRAME_ERROR);
         }
         int action = Integer.parseInt(map.get("action").toString());
