@@ -204,8 +204,10 @@ public class ActionService {
         }*/
 
         SocialEntity socialOld = socialMapper.getOneSocial(socialEntity);
-        if(socialOld != null && socialOld.getStatus() != 1){
-            socialMapper.updateSocial(socialEntity);
+        if(socialOld != null){
+            if(socialOld.getStatus() != 1) {
+                socialMapper.updateSocial(socialEntity);
+            }
         }else{
             socialMapper.insertSocial(socialEntity);
         }

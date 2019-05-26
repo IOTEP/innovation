@@ -55,6 +55,14 @@
             app_type = #{appType} AND app_user_id = #{appUserId}
     </select>
 
+    <select id="getOneById" parameterType="com.iotep.free.entity.UserEntity" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE id = #{id}
+    </select>
+
     <select id="getSome"  resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

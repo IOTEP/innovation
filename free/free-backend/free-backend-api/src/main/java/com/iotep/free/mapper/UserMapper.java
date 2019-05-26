@@ -28,6 +28,13 @@ public interface UserMapper {
 
     /**
      *
+     * @param userEntity
+     * @return
+     */
+    public UserEntity getOneById(UserEntity userEntity);
+
+    /**
+     *
      * @return
      */
     public List<UserEntity> getAll();

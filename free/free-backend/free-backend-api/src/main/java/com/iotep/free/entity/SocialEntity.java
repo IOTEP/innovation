@@ -19,6 +19,6 @@ public class SocialEntity {
     private Integer userId;
     private Integer attentionId;
     private Integer status;
-    private Date createTime;
-    private Date updateTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

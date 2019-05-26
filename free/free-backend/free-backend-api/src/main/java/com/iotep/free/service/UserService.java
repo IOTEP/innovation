@@ -74,7 +74,8 @@ public class UserService {
     }
 
     public UserEntity findUserInfo(UserEntity userEntity,int myUserId) {
-        UserEntity userEntityInfo = userMapper.getOne(userEntity);
+        UserEntity userEntityInfo = userMapper.getOneById(userEntity);
+        System.out.println(userEntityInfo.getId());
 
         if(userEntityInfo.getId() > 0) {
             //关注人数
