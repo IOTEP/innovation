@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-03 22:07:30 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-05-08 17:32:06
+ * @Last Modified time: 2019-05-25 14:46:07
  */
 
 import {getJSON,postJSON} from '../utils/request';
@@ -50,7 +50,20 @@ export  function  getTopicInfo(params){
       }
     }
 }
-//点赞话题回复
+// 点击抽奖
+export async function clickPrice(params){
+  let result=await postJSON(api.partakePrice, params);
+  if(result&&result.data&&result.data.success){
+    //成功点赞
+    return result.data;
+  }else{
+    //点赞失败
+    Taro.showToast({title:'参与失败 请重试!',icon:'none'})
+  }
+  return  false;
+}
+
+//点赞
 export  async  function  admireTopic(params){
     let  result=await   postJSON(api.upreply+params.replyid+'/ups',params);
       if(result&&result.data&&result.data.success){

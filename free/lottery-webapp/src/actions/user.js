@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-05-06 17:35:26 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-05-07 10:43:21
+ * @Last Modified time: 2019-05-26 20:48:27
  */
 
 import {getJSON,postJSON} from '../utils/request';
@@ -36,6 +36,24 @@ export function loginRequest(params){
         dispatch({
           type:'login',
           token:result.data.data
+        })
+      }
+    }
+  }
+}
+// 获取用户详细信息
+export function getUserInfo(params){
+  return async dispatch=>{
+    let result= await postJSON(api.userInfo,params).catch(_ERROR => {
+      console.log(_ERROR);
+    })
+    console.log("&&&&&&&&&&&&&&&&^^^^")
+    console.log(result)
+    if(result&&result.data){
+      if(result.data.errNo === 0){
+        dispatch({
+          type:'userInfo',
+          userInfo:result.data.data
         })
       }
     }

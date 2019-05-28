@@ -1,29 +1,28 @@
 import  Taro,{Component} from '@tarojs/taro';
-import  {View,Text,Button} from  '@tarojs/components';
+import  {View,Text,Button,ScrollView} from  '@tarojs/components';
 import {connect} from '@tarojs/redux';
 import  {getTopicInfo} from  '../../actions/topiclist';
-import  {showComment} from  '../../actions/comment';
+import {setCommentBox} from '../../actions/comment';
+
 import TopicInfo from '../../components/topicinfo/topicinfo'
 import CommentList from '../../components/comment/commentlist'
 import Lottery from '../../components/topicinfo/lottery'
 import Comment from '../../components/comment/comment'
-
+import moment from 'moment'
 import { AtTabs, AtDivider, AtTabsPane, AtNavBar, AtCountdown,AtFloatLayout,AtTextarea,AtButton } from 'taro-ui'
 import './index.less'
 @connect(function(store) {
-  console.log("**********呵呵呵**************")
-  console.log(store)
   return {
     topicinfo: store.topiclist.topicinfo,
-    commentshow: store.comment.commentBox
+    commentlist: store.commentlist
   }
 }, function(dispatch) {
   return {
     getTopicInfo(params) {
       dispatch(getTopicInfo(params))
     },
-    showComment(isShow) {
-      dispatch(showComment(isShow))
+    setCommentBox(params){
+      dispatch(setCommentBox(params))
     }
   }
 })
@@ -36,12 +35,16 @@ class Detail extends   Component{
       this.state = {
         current: 0,
         //显示回复组件
+        value:'',
+        commentshow: 0,
         showReplyContent: false
-
       }
     }
    componentWillMount(){
     this.getDetail();
+   }
+   handleClose() {
+    this.props.setCommentBox&&this.props.setCommentBox(false)
    }
    getDetail(){
     let params={
@@ -72,13 +75,41 @@ class Detail extends   Component{
   }
   // tab change
   tabChange(value) {
-    this.setState({
-      current: value
+    value === 0 ? this.setState({
+      current: value,
+      commentshow: 0
+    }) : this.setState({
+      current: value,
+      commentshow: 1
     })
-    this.props.showComment && this.props.showComment(value);
+  }
+  handleChange(event) {
+    this.setState({
+      value: event.target.value
+    }, () => {
+    })
+  }
+  subComment() {
+    alert(this.state.value)
   }
    render(){
-      let {topicinfo, replies, commentshow} = this.props;
+      let {topicinfo, commentlist} = this.props;
+      console.log("是吧")
+      console.log(commentlist)
+      let timeObj = {}
+      if (topicinfo.endTime && 1) {
+        let releaseDate = moment('2019-06-01 00:00:00');
+        let currentDate = moment();
+        const diff = releaseDate.diff(currentDate);
+        const diffDuration = moment.duration(diff);
+        //   ${diffDuration.months()} months
+        timeObj = {
+          days: diffDuration.days(),
+          hours: diffDuration.hours(),
+          minutes: diffDuration.minutes(),
+          seconds: diffDuration.seconds()
+        }
+      }
       const tabList = [{ title: '活动详情描述' }, { title: '中奖情况' }]
       return (<View className='detail'>
               <AtNavBar
@@ -95,7 +126,12 @@ class Detail extends   Component{
               tabList={tabList}
               onClick={this.tabChange.bind(this)}>
               <AtTabsPane current={this.state.current} index={0} >
+                <ScrollView style={{height:'100vh', paddingBottom: '46PX',boxSizing: 'border-box'}}   scrollX={false} scrollY={true} >
                 <TopicInfo topicinfo={topicinfo} />
+                活动状态跟时间逻辑不对
+                {
+                  topicinfo.isEnd
+                }
                 <View className='count-down'>
                   <Text className='time-title'>
                     距离开奖：
@@ -104,47 +140,68 @@ class Detail extends   Component{
                     isShowDay
                     isCard
                     format={{ hours: ':', minutes: ':', seconds: '' }}
-                    day={0}
-                    hours={0}
-                    minutes={0}
-                    seconds={100}
+                    day={timeObj.days}
+                    hours={timeObj.hours}
+                    minutes={timeObj.minutes}
+                    seconds={timeObj.seconds}
                     onTimeUp={this.onTimeUp.bind(this)}
                   />
                 </View>
-                <Lottery activeid={this.$router.params.activeid}>
+                <Lottery topicinfo={topicinfo} activeid={this.$router.params.activeid} userId={this.$router.params.userId}>
                 </Lottery>
                 <AtDivider content='精彩评论' />
-                <CommentList>
+                <CommentList activeid={this.$router.params.activeid}>
                 </CommentList>
+                </ScrollView>
               </AtTabsPane>
               <AtTabsPane current={this.state.current} index={1}>
                 <View className='price-tip-box'> 
                   <View className='price-tip'>
-                    很遗憾，你未中奖！！
+                    {
+                      topicinfo.isJoin ? 
+                      <View>
+                        {
+                          topicinfo.isRaffle ? '恭喜你中奖了' + topicinfo.prizeRemark: '很遗憾您未中奖'
+                        }
+                      </View> : '您还未参加此次抽奖'
+                    }
                   </View>
-                  <View className='list-of-winners-title'>
-                    中奖者名单
-                  </View>
-                  <View className='list-of-winners'>
+                  {
+                    topicinfo.raffleUserList && topicinfo.raffleUserList.map((item ) = 
                     <View>
-                    奖品：iPhone X  1X
+                      <View className='list-of-winners-title'>
+                        中奖者名单
+                      </View>
+                      <View className='list-of-winners'>
+                        <View>
+                          {item.nick}
+                        </View>
+                      </View>
                     </View>
-                  </View>
+                    ) ? '' :
+                    <View className='list-no-price'>
+                      <Text>暂时还没有人中奖</Text>
+                    </View> 
+                  }
                 </View> 
               </AtTabsPane>
             </AtTabs>
             {
-              commentshow === 0 ?   <Comment></Comment> : ''
+              this.state.commentshow === 0 ? <Comment topicinfo={topicinfo}></Comment> : ''
             }
             <View>
-              <AtFloatLayout isOpened={false} title="评论">
+              <AtFloatLayout isOpened={commentlist.commentBox} title="评论"
+                onClose={this.handleClose.bind(this)}
+              >
                 <AtTextarea
-                // value={this.state.value}
-                // onChange={this.handleChange.bind(this)}
+                  value={this.state.value}
+                  onChange={this.handleChange.bind(this)}
                   maxLength={100}
                   placeholder='畅所欲言...'
                 />
-                <AtButton type='primary' style={{marginTop: "20px"}}>发表评论</AtButton>
+                <AtButton type='primary' className='comment-sub'
+                  onClick={this.subComment.bind(this)}
+                >发表评论</AtButton>
               </AtFloatLayout>
             </View>
           </View>)

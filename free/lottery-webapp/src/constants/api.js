@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-28 13:44:39 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-05-08 22:51:44
+ * @Last Modified time: 2019-05-26 22:35:50
  */
 
 // const rootPath='https://free.sanyicun.com/free';
@@ -19,7 +19,19 @@ const apiObject={
   // 登录
   login:rootPath+'/user/login',
   // 活动人员列表
-  userList:rootPath+'/activity/userList'
+  userList:rootPath+'/activity/userList',
+  // 参与抽奖
+  partakePrice:rootPath+'/action/raffle',
+  // 获取评论列表
+  commentList:rootPath+'/activity/commentAndLikeInfo',
+  // 获取我的详细信息
+  userInfo:rootPath+'/user/info',
+  // 获取关注列表
+  followUser:rootPath+'/user/attention/list',
+  // 获取粉丝列表
+  fansUser:rootPath+'/user/fans/list',
+  // 获取抽奖列表
+  priceList:rootPath+'/user/activity/list'
 
 }
 export default apiObject;

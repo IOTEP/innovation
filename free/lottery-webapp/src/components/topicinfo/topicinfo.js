@@ -2,19 +2,23 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-02 23:51:53 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-05-08 22:45:50
+ * @Last Modified time: 2019-05-25 20:00:47
  */
 
 import  Taro,{Component} from '@tarojs/taro';
 import  {View,Text,Button} from  '@tarojs/components';
 import  './topicinfo.less'
 import { Swiper, SwiperItem } from '@tarojs/components'
-import {myTimeToLocal} from  '../../utils/date'
-
+// import {myTimeToLocal} from  '../../utils/date'
+import moment from 'moment'; 
 
 class  Topicinfo  extends   Component{
    render(){
-     let {topicinfo} = this.props;
+     let {topicinfo} = this.props
+     let endTime = topicinfo.endTime
+     if (endTime) {
+      endTime = moment(endTime).format('YYYY-MM-DD HH:mm:ss')
+     }
       return (<View className="shops-info">
         <View className='img-box'>
           <Swiper
@@ -45,7 +49,8 @@ class  Topicinfo  extends   Component{
             {topicinfo.remark ? topicinfo.remark : ''}
           </View>
           <View  className='topic-info'>
-            <Text>{myTimeToLocal(topicinfo.endTime)}</Text>
+            <Text>开奖时间：</Text>
+            <Text>{endTime}</Text>
             <Text style={{marginLeft: '0.5rem',}}>
             {topicinfo.raffleMode ? topicinfo.raffleMode : ''}
             </Text>

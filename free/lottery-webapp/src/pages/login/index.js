@@ -109,9 +109,9 @@ class Login extends   Component{
             code: code
          }
          this.props.loginRequest && this.props.loginRequest(params)
-         // Taro.navigateTo({
-         //    url: '/pages/index/index',
-         // })
+         Taro.navigateTo({
+            url: '/pages/index/index',
+         })
       }
    }
    // 微博登录

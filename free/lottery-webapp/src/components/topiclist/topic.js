@@ -6,7 +6,7 @@ import  './topic.less'
 class  Topic  extends   Component{
    //跳转到详情页
    goToDetail(priceActiveList){
-      Taro.navigateTo({url:'/pages/detail/index?activeid=' + priceActiveList.id});
+      Taro.navigateTo({url:'/pages/detail/index?activeid=' + priceActiveList.id + '&userId=' + priceActiveList.userId});
    }
    // 关注
    handelfollow(e) {
@@ -63,8 +63,12 @@ class  Topic  extends   Component{
                   </View>
                </View>
                <View  className='topic-info'>
-                  <Text>{myTimeToLocal(item.startTime)}</Text>
-                  <Text style={{marginLeft: '10PX',}}>{item.raffleMode ? item.raffleMode : ''}
+                  <Text>
+                     {/* {myTimeToLocal(item.startTime)} */}
+                     {item.startTime?item.startTime:''}
+                  </Text>
+                  <Text style={{marginLeft: '10PX'}}>
+                  {item.raffleMode?item.raffleMode:''}
                   </Text>
               </View>
             </View>

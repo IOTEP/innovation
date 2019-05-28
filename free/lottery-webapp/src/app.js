@@ -28,7 +28,10 @@ class App extends Component {
       'pages/set/index',
       'pages/address/index',
       'pages/addaddress/index',
-      'pages/login/index'
+      'pages/login/index',
+      'pages/follow/index',
+      'pages/fans/index',
+      'pages/price/index'
     ],
     window: {
       backgroundTextStyle: 'light',
