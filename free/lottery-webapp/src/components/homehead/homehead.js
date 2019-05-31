@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-04 22:19:52 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-04-10 14:37:53
+ * @Last Modified time: 2019-05-31 10:25:35
  */
 
 import  Taro,{Component} from '@tarojs/taro';
@@ -27,7 +27,7 @@ class  HomeHead  extends   Component{
       return (<View className='at-row at-row__justify--between home-head'>
       <View className='at-col at-col-5'>
          <Text className='text-logo'>
-            每日抽奖
+            新鲜快送
          </Text>
       </View>
       <View className='at-col at-col-5 text-right'>

@@ -7,7 +7,7 @@ import './index.less'
 class Index extends Component {
 
   config = {
-    navigationBarTitleText: '公共抽奖'
+    navigationBarTitleText: '新鲜快送'
   }
   constructor () {
     super(...arguments)

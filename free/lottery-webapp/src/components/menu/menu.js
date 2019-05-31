@@ -2,7 +2,7 @@
  * @Author: TravelerZw 
  * @Date: 2019-04-03 20:39:07 
  * @Last Modified by: TravelerZw
- * @Last Modified time: 2019-05-12 11:24:05
+ * @Last Modified time: 2019-05-31 10:27:45
  */
 
 import  Taro,{Component} from '@tarojs/taro';
@@ -43,6 +43,7 @@ class  Menu  extends   Component{
     Taro.navigateTo({url:'/pages/index/index'});
   }
   handleClick (value) {
+    return
     let {pageNum} = this.props;
     if (value === pageNum) {
       return;
@@ -61,7 +62,7 @@ class  Menu  extends   Component{
         fixed
         tabList={[
           { title: '首页', iconType: 'home', text: '' },
-          { title: '发起抽奖', iconType: 'camera' },
+          { title: '新鲜快送', iconType: 'camera' },
           { title: '我的', iconType: 'user', text: '', max: '' }
         ]}
         selectedColor='#f10215'

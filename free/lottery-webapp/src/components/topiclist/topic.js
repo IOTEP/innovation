@@ -6,6 +6,7 @@ import  './topic.less'
 class  Topic  extends   Component{
    //跳转到详情页
    goToDetail(priceActiveList){
+      return
       Taro.navigateTo({url:'/pages/detail/index?activeid=' + priceActiveList.id + '&userId=' + priceActiveList.userId});
    }
    // 关注
@@ -57,7 +58,7 @@ class  Topic  extends   Component{
                <View className='content'>
                   <View>
                      <Text className='shops-intor-title'>
-                        奖品：
+                        商品：
                      </Text>
                      {item.remark ? item.remark : ''}
                   </View>
